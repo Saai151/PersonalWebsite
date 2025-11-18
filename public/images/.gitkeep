@@ -1,0 +1,4 @@
+# Place static images here that don't need processing
+# Access them with: /images/filename.jpg
+# Example: <img src="/images/profile.jpg" alt="Profile" />
+

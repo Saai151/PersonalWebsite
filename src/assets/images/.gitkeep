@@ -1,0 +1,4 @@
+# Place images here that you want to import in components
+# Access them with: import profileImg from '@/assets/images/profile.jpg'
+# Vite will optimize and process these images
+
