@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { X, ChevronRight, ChevronLeft, Github, Loader2, Share2, Code, Coffee, Zap, Trophy, Heart } from 'lucide-react'
+import { X, ChevronRight, ChevronLeft, Github, Loader2, Code, Zap } from 'lucide-react'
 import { Button } from './ui/button'
 import { GitHubService } from '../lib/github'
 import CountUpNumber from './CountUpNumber'
@@ -83,10 +83,8 @@ const Wrapped: React.FC<WrappedProps> = ({ onClose }) => {
           contributionsByRepo = null
         }
 
-        const [repos, languagePercentages] = await Promise.all([
-          github.getRepositories(),
-          github.getLanguagePercentages(),
-        ])
+        const repos = await github.getRepositories()
+        await github.getLanguagePercentages()
 
         // Use GraphQL data if available, otherwise fall back to REST API
         let totalCommits
@@ -210,7 +208,7 @@ const Wrapped: React.FC<WrappedProps> = ({ onClose }) => {
     { id: 4, component: <CodeHabitsSlide data={wrappedData} />, bg: 'from-yellow-500/30 via-[#121212] to-[#000000]' },
     { id: 5, component: <SpecialMomentsSlide />, bg: 'from-pink-500/30 via-[#121212] to-[#000000]' },
     { id: 6, component: <TopReposSlide repos={wrappedData.topRepos} />, bg: 'from-emerald-500/30 via-[#121212] to-[#000000]' },
-    { id: 7, component: <PersonalitySlide languages={wrappedData.languages} data={wrappedData} />, bg: 'from-purple-500/30 via-[#121212] to-[#000000]' },
+    { id: 7, component: <PersonalitySlide languages={wrappedData.languages} />, bg: 'from-purple-500/30 via-[#121212] to-[#000000]' },
     { id: 8, component: <ShareSlide onClose={onClose} data={wrappedData} />, bg: 'from-[#1ED760]/30 via-[#121212] to-[#000000]' },
   ]
 
@@ -535,7 +533,7 @@ const TopReposSlide: React.FC<{ repos: Array<{ name: string; commits: number }> 
 }
 
 // SLIDE 8: Personality
-const PersonalitySlide: React.FC<{ languages: LanguageStat[]; data: any }> = ({ languages, data }) => {
+const PersonalitySlide: React.FC<{ languages: LanguageStat[] }> = ({ languages }) => {
   const topLang = languages[0]?.name || 'Code'
   const personalities: { [key: string]: string } = {
     'TypeScript': 'THE ARCHITECT',

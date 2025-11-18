@@ -1,5 +1,5 @@
 import React from 'react'
-import { Home, Search, Library, Plus, ArrowRight, Heart, Sparkles, Globe, Mail, Linkedin, Github } from 'lucide-react'
+import { Home, Search, Library, Plus, ArrowRight, Heart, Sparkles, Mail, Linkedin, Github } from 'lucide-react'
 import { cn } from '../lib/utils'
 
 interface SidebarProps {

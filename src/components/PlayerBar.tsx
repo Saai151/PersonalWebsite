@@ -13,7 +13,7 @@ const PlayerBar: React.FC = () => {
     artist: 'Saai Arora',
     duration: 180 // 3 minutes
   })
-  const progressInterval = useRef<NodeJS.Timeout>()
+  const progressInterval = useRef<ReturnType<typeof setInterval>>()
 
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {

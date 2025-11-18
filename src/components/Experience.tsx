@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Play, Clock, Calendar, ChevronDown, ChevronUp, Pause } from 'lucide-react'
+import { Play, Clock, ChevronDown, ChevronUp, Pause } from 'lucide-react'
 import { cn } from '../lib/utils'
 
 interface ExperienceItem {

@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
-import { Play, X, ExternalLink, Github } from 'lucide-react'
-import { cn } from '../lib/utils'
+import { Play, X, Github } from 'lucide-react'
 import { Button } from './ui/button'
 
 interface Project {
