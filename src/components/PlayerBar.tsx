@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Play, Pause, SkipBack, SkipForward, Shuffle, Repeat, Volume2 } from 'lucide-react'
+import { Play, SkipBack, SkipForward, Shuffle, Repeat, Volume2 } from 'lucide-react'
 import { Button } from './ui/button'
 // Import the same profile image
 import profileImage from '../assets/images/Profile.jpeg'
