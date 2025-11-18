@@ -1,53 +1,70 @@
 import React from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from './ui/card'
-import { Code } from 'lucide-react'
+
+interface SkillCategory {
+  title: string
+  skills: string[]
+}
 
 const Skills: React.FC = () => {
-  const skillCategories = [
+  const skillCategories: SkillCategory[] = [
     {
       title: 'Languages',
       skills: ['Ruby', 'Go', 'Java', 'Python', 'C', 'C++', 'JavaScript', 'TypeScript', 'SQL', 'HTML/CSS']
     },
     {
-      title: 'Frameworks & Libraries',
-      skills: ['Ruby on Rails', 'React', 'Express.js', 'Django', 'Bootstrap', 'MUI', 'Angular', 'Intel Embree', 'Pandas', 'NumPy', 'Matplotlib', 'TensorFlow', 'Seaborn', 'Openpyxl']
-    },
-    {
-      title: 'Tools & Platforms',
-      skills: ['Docker', 'Kubernetes', 'Jenkins', 'Terraform', 'Git', 'Supabase', 'AWS', 'GCP', 'PostgreSQL', 'MongoDB', 'Redash', 'OWASP ZAP', 'Podman', 'Linux', 'CI/CD', 'REST APIs']
-    },
-    {
-      title: 'Other',
-      skills: ['Jira', 'Figma', 'Excel', 'PowerPoint', 'Data Analysis', 'Problem Solving']
+      title: 'Frameworks & Tools',
+      skills: ['Rails', 'React', 'Express', 'Docker', 'K8s', 'AWS', 'GCP', 'Postgres', 'Terraform', 'Git']
     }
   ]
 
+  const getGradient = (name: string) => {
+    const gradients = [
+      'from-red-500 to-orange-500',
+      'from-blue-500 to-cyan-500',
+      'from-purple-500 to-pink-500',
+      'from-green-500 to-emerald-500',
+      'from-yellow-500 to-orange-500',
+      'from-indigo-500 to-purple-500',
+      'from-pink-500 to-rose-500',
+    ]
+    const index = name.length % gradients.length
+    return gradients[index]
+  }
+
+  const getInitials = (name: string) => {
+    return name.substring(0, 2).toUpperCase()
+  }
+
   return (
     <section className="mb-12">
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold text-white">Technical Skills</h2>
-      </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {skillCategories.map((category, index) => (
-          <Card key={index} className="bg-spotify-gray border-spotify-light-gray hover:bg-spotify-light-gray transition-colors">
-            <CardHeader>
-              <div className="flex items-center gap-3">
-                <Code className="w-5 h-5 text-spotify-green" />
-                <CardTitle className="text-white text-lg">{category.title}</CardTitle>
+      {skillCategories.map((category, idx) => (
+        <div key={idx} className="mb-8 last:mb-0">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-2xl font-bold text-white">{category.title}</h2>
+            <span className="text-sm font-bold text-spotify-text-secondary uppercase tracking-widest hover:underline cursor-pointer">
+              Show All
+            </span>
+          </div>
+          
+          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-4">
+            {category.skills.map((skill, i) => (
+              <div 
+                key={i} 
+                className="bg-[#181818] hover:bg-[#282828] p-4 rounded-lg transition-all duration-300 cursor-pointer group flex flex-col items-center gap-3 hover-lift animate-fade-in-up"
+                style={{ animationDelay: `${(idx * 5 + i) * 50}ms` }}
+              >
+                <div className={`w-24 h-24 rounded-full bg-gradient-to-br ${getGradient(skill)} shadow-lg group-hover:shadow-xl transition-shadow flex items-center justify-center`}>
+                  <span className="text-2xl font-bold text-white drop-shadow-md">{getInitials(skill)}</span>
+                </div>
+                <div className="text-center">
+                  <h3 className="font-bold text-white text-sm truncate w-full">{skill}</h3>
+                  <p className="text-xs text-spotify-text-secondary mt-1">Skill</p>
+                </div>
               </div>
-            </CardHeader>
-            <CardContent>
-              <div className="flex flex-wrap gap-2">
-                {category.skills.map((skill, i) => (
-                  <span key={i} className="px-3 py-1.5 bg-spotify-light-gray text-white text-sm rounded-full hover:bg-spotify-green transition-colors cursor-default">
-                    {skill}
-                  </span>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+            ))}
+          </div>
+        </div>
+      ))}
     </section>
   )
 }

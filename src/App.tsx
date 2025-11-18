@@ -86,16 +86,17 @@ function App() {
         onNavClick={handleNavClick}
         isWrappedOpen={showWrapped}
       />
-      <div className="flex flex-col flex-1 overflow-hidden md:ml-64">
+      <div className="flex flex-col flex-1 overflow-hidden md:ml-[280px] bg-[#121212] relative">
         <Header />
         {showWrapped ? (
           <Wrapped onClose={() => setShowWrapped(false)} />
         ) : (
-          <main ref={mainRef} className="flex-1 overflow-y-auto">
+          <main ref={mainRef} className="flex-1 overflow-y-auto relative z-10">
+            <div className="absolute top-0 left-0 right-0 h-80 bg-gradient-to-b from-emerald-900/50 to-[#121212] -z-10" />
             <div id="home">
               <Hero />
             </div>
-            <div className="px-4 md:px-8 py-6">
+            <div className="px-4 md:px-8 py-6 bg-[#121212]/50 backdrop-blur-3xl">
               <div id="about">
                 <About />
               </div>

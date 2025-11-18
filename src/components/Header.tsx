@@ -8,12 +8,12 @@ const Header: React.FC = () => {
 
   return (
     <>
-      <div className="sticky top-0 z-40 bg-spotify-dark/80 backdrop-blur-lg border-b border-spotify-light-gray">
-        <div className="flex items-center gap-4 px-4 md:px-8 py-4">
+      <div className="sticky top-0 z-40 bg-spotify-dark/80 backdrop-blur-lg border-b border-spotify-light-gray md:hidden">
+        <div className="flex items-center gap-4 px-4 py-4">
           <Button
             variant="ghost"
             size="icon"
-            className="md:hidden text-white"
+            className="text-white"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
             {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Home, User, Briefcase, FolderKanban, Code, Music, Sparkles } from 'lucide-react'
+import { Home, Search, Library, Plus, ArrowRight, Heart, Sparkles, Globe, Mail, Linkedin, Github } from 'lucide-react'
 import { cn } from '../lib/utils'
 
 interface SidebarProps {
@@ -9,14 +9,6 @@ interface SidebarProps {
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ onWrappedClick, onNavClick, isWrappedOpen }) => {
-  const navItems = [
-    { icon: Home, label: 'Home', href: '#home' },
-    { icon: User, label: 'About', href: '#about' },
-    { icon: Briefcase, label: 'Experience', href: '#experience' },
-    { icon: FolderKanban, label: 'Projects', href: '#projects' },
-    { icon: Code, label: 'Skills', href: '#skills' },
-  ]
-
   const handleNavClick = (href: string, e?: React.MouseEvent) => {
     e?.preventDefault()
     
@@ -41,64 +33,155 @@ const Sidebar: React.FC<SidebarProps> = ({ onWrappedClick, onNavClick, isWrapped
   }
 
   return (
-    <div className="hidden md:flex w-64 bg-spotify-darker h-screen flex-col fixed left-0 top-0 z-50">
-      <div className="p-6">
-        <div className="flex items-center gap-2 mb-8">
-          <div className="w-8 h-8 bg-spotify-green rounded-full flex items-center justify-center">
-            <Music className="w-5 h-5 text-black" />
-          </div>
-          <span className="text-white font-bold text-xl">Saai Arora</span>
+    <div className="hidden md:flex w-[280px] bg-black h-screen flex-col fixed left-0 top-0 z-50 gap-2 p-2">
+      {/* Top Navigation Block */}
+      <div className="bg-[#121212] rounded-lg p-6 flex flex-col gap-5">
+        <div className="flex items-center gap-4 text-white cursor-pointer" onClick={(e) => handleNavClick('#home', e)}>
+          <Home className="w-6 h-6" />
+          <span className="font-bold text-base">Home</span>
         </div>
-        <nav className="space-y-1">
-          {navItems.map((item) => {
-            const Icon = item.icon
-            return (
-              <button
-                key={item.href}
-                onClick={() => handleNavClick(item.href)}
+        <div className="flex items-center gap-4 text-spotify-text-secondary hover:text-white transition-colors cursor-pointer" onClick={(e) => handleNavClick('#about', e)}>
+          <Search className="w-6 h-6" />
+          <span className="font-bold text-base">About</span>
+        </div>
+      </div>
+
+      {/* Library Block */}
+      <div className="bg-[#121212] rounded-lg flex-1 flex flex-col overflow-hidden">
+        <div className="p-4 shadow-md z-10">
+          <div className="flex items-center justify-between text-spotify-text-secondary hover:text-white transition-colors cursor-pointer mb-4">
+            <div className="flex items-center gap-2">
+              <Library className="w-6 h-6" />
+              <span className="font-bold text-base">Your Library</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Plus className="w-5 h-5 hover:bg-[#1a1a1a] rounded-full p-0.5" />
+              <ArrowRight className="w-5 h-5 hover:bg-[#1a1a1a] rounded-full p-0.5" />
+            </div>
+          </div>
+          
+          {/* Tags */}
+          <div className="flex gap-2 overflow-x-auto pb-2 no-scrollbar">
+            <span className="px-3 py-1.5 bg-[#232323] hover:bg-[#2a2a2a] rounded-full text-sm font-medium text-white cursor-pointer whitespace-nowrap transition-colors">
+              Playlists
+            </span>
+            <span className="px-3 py-1.5 bg-[#232323] hover:bg-[#2a2a2a] rounded-full text-sm font-medium text-white cursor-pointer whitespace-nowrap transition-colors">
+              Artists
+            </span>
+          </div>
+        </div>
+
+        {/* Library Content */}
+        <div className="flex-1 overflow-y-auto px-2 hover:overflow-y-auto custom-scrollbar">
+          <div className="space-y-1 py-2">
+            {/* Liked Songs Placeholder */}
+            <div className="flex items-center gap-3 p-2 rounded-md hover:bg-[#1a1a1a] cursor-pointer group">
+              <div className="w-12 h-12 bg-gradient-to-br from-[#450af5] to-[#c4efd9] rounded-md flex items-center justify-center flex-shrink-0">
+                <Heart className="w-6 h-6 text-white fill-white" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="font-bold text-white truncate group-hover:text-spotify-green transition-colors">Liked Songs</p>
+                <p className="text-sm text-spotify-text-secondary truncate">Auto-generated • 1,234 songs</p>
+              </div>
+            </div>
+
+            {/* Wrapped Item */}
+            {onWrappedClick && (
+              <div 
+                onClick={onWrappedClick}
                 className={cn(
-                  "w-full flex items-center gap-4 px-4 py-3 rounded-lg text-spotify-text-secondary hover:text-white transition-colors",
-                  "hover:bg-spotify-light-gray text-left"
+                  "flex items-center gap-3 p-2 rounded-md hover:bg-[#1a1a1a] cursor-pointer group transition-colors",
+                  isWrappedOpen ? "bg-[#232323]" : ""
                 )}
               >
-                <Icon className="w-5 h-5" />
-                <span className="font-medium">{item.label}</span>
-              </button>
-            )
-          })}
-          {onWrappedClick && (
-            <button
-              onClick={onWrappedClick}
-              className={cn(
-                "w-full flex items-center gap-4 px-4 py-3 rounded-lg transition-colors font-medium text-left",
-                isWrappedOpen 
-                  ? "text-spotify-green bg-spotify-light-gray" 
-                  : "text-spotify-green hover:text-spotify-green-hover hover:bg-spotify-light-gray"
-              )}
+                <div className="w-12 h-12 bg-gradient-to-br from-[#1ED760] via-[#00D4FF] to-[#8B5CF6] rounded-md flex items-center justify-center flex-shrink-0">
+                  <Sparkles className="w-6 h-6 text-white" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className={cn("font-bold truncate transition-colors", isWrappedOpen ? "text-spotify-green" : "text-white group-hover:text-spotify-green")}>
+                    2025 Wrapped
+                  </p>
+                  <p className="text-sm text-spotify-text-secondary truncate">Your year in code</p>
+                </div>
+              </div>
+            )}
+
+            {/* Experience */}
+            <div 
+              onClick={(e) => handleNavClick('#experience', e)}
+              className="flex items-center gap-3 p-2 rounded-md hover:bg-[#1a1a1a] cursor-pointer group"
             >
-              <Sparkles className="w-5 h-5" />
-              <span>2025 Wrapped</span>
-            </button>
-          )}
-        </nav>
-      </div>
-      <div className="mt-auto p-6 space-y-2 text-xs text-spotify-text-secondary">
-        <a href="tel:416-219-7243" className="block hover:text-white transition-colors">
-          📞 416-219-7243
-        </a>
-        <a href="mailto:saai.arora@uwaterloo.ca" className="block hover:text-white transition-colors">
-          ✉️ saai.arora@uwaterloo.ca
-        </a>
-        <a href="https://www.linkedin.com/in/saaiarora" target="_blank" rel="noopener noreferrer" className="block hover:text-white transition-colors">
-          💼 LinkedIn
-        </a>
-        <a href="https://github.com/saai151" target="_blank" rel="noopener noreferrer" className="block hover:text-white transition-colors">
-          💻 GitHub
-        </a>
+              <div className="w-12 h-12 bg-[#282828] rounded-md flex items-center justify-center flex-shrink-0">
+                <span className="text-xl">💼</span>
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="font-bold text-white truncate group-hover:text-spotify-green transition-colors">Experience</p>
+                <p className="text-sm text-spotify-text-secondary truncate">Work History</p>
+              </div>
+            </div>
+
+            {/* Projects */}
+            <div 
+              onClick={(e) => handleNavClick('#projects', e)}
+              className="flex items-center gap-3 p-2 rounded-md hover:bg-[#1a1a1a] cursor-pointer group"
+            >
+              <div className="w-12 h-12 bg-[#282828] rounded-md flex items-center justify-center flex-shrink-0">
+                <span className="text-xl">🚀</span>
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="font-bold text-white truncate group-hover:text-spotify-green transition-colors">Projects</p>
+                <p className="text-sm text-spotify-text-secondary truncate">Discography</p>
+              </div>
+            </div>
+
+            {/* Skills */}
+            <div 
+              onClick={(e) => handleNavClick('#skills', e)}
+              className="flex items-center gap-3 p-2 rounded-md hover:bg-[#1a1a1a] cursor-pointer group"
+            >
+              <div className="w-12 h-12 bg-[#282828] rounded-md flex items-center justify-center flex-shrink-0">
+                <span className="text-xl">⚡</span>
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="font-bold text-white truncate group-hover:text-spotify-green transition-colors">Skills</p>
+                <p className="text-sm text-spotify-text-secondary truncate">Tech Stack</p>
+              </div>
+            </div>
+
+             {/* Education */}
+             <div 
+              onClick={(e) => handleNavClick('#education', e)}
+              className="flex items-center gap-3 p-2 rounded-md hover:bg-[#1a1a1a] cursor-pointer group"
+            >
+              <div className="w-12 h-12 bg-[#282828] rounded-md flex items-center justify-center flex-shrink-0">
+                <span className="text-xl">🎓</span>
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="font-bold text-white truncate group-hover:text-spotify-green transition-colors">Education</p>
+                <p className="text-sm text-spotify-text-secondary truncate">University of Waterloo</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Contact Info Footer */}
+          <div className="mt-4 p-4 border-t border-[#282828] space-y-3">
+            <a href="mailto:saai.arora@uwaterloo.ca" className="flex items-center gap-3 text-spotify-text-secondary hover:text-white transition-colors text-sm group">
+              <Mail className="w-4 h-4" />
+              <span>Email Me</span>
+            </a>
+            <a href="https://www.linkedin.com/in/saaiarora" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-spotify-text-secondary hover:text-white transition-colors text-sm group">
+              <Linkedin className="w-4 h-4" />
+              <span>LinkedIn</span>
+            </a>
+            <a href="https://github.com/saai151" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-spotify-text-secondary hover:text-white transition-colors text-sm group">
+              <Github className="w-4 h-4" />
+              <span>GitHub</span>
+            </a>
+          </div>
+        </div>
       </div>
     </div>
   )
 }
 
 export default Sidebar
-

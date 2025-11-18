@@ -40,6 +40,18 @@ const Wrapped: React.FC<WrappedProps> = ({ onClose }) => {
     contributions: 0,
   })
 
+  const getLanguageColor = (language: string): string => {
+    const colors: { [key: string]: string } = {
+      'TypeScript': '#3178c6', 'JavaScript': '#f7df1e', 'Go': '#00add8',
+      'Python': '#3776ab', 'Java': '#ed8b00', 'C++': '#00599c',
+      'C': '#a8b9cc', 'Rust': '#000000', 'Ruby': '#cc342d',
+      'PHP': '#777bb4', 'Swift': '#fa7343', 'Kotlin': '#7f52ff',
+      'Dart': '#0175c2', 'HTML': '#e34c26', 'CSS': '#1572b6',
+      'Shell': '#89e051', 'Dockerfile': '#384d54', 'Makefile': '#427819',
+    }
+    return colors[language] || '#1ED760'
+  }
+
   // Fetch GitHub data on component mount
   useEffect(() => {
     const fetchData = async () => {
@@ -56,7 +68,7 @@ const Wrapped: React.FC<WrappedProps> = ({ onClose }) => {
         console.log('🔍 Fetching real GitHub data...')
         const github = new GitHubService('saai151', token)
         
-        // Try to get contribution data from GraphQL (includes all repos, even ones you don't own)
+        // Try to get contribution data from GraphQL
         let userContributions
         let contributionsByRepo
         try {
@@ -95,23 +107,14 @@ const Wrapped: React.FC<WrappedProps> = ({ onClose }) => {
           topRepos = await github.getTopReposByCommits(5)
         }
 
-        // Add hardcoded Shopify contributions (private org repos not captured by API)
+        // Add hardcoded Shopify contributions
         const SHOPIFY_COMMITS = 30
         const SHOPIFY_PRS = 10
         
         totalCommits = totalCommits + SHOPIFY_COMMITS
         const adjustedPRs = (userContributions?.totalPullRequestContributions || Math.floor(totalCommits / 20)) + SHOPIFY_PRS
 
-        console.log('✅ Successfully fetched GitHub data:', {
-          repos: repos.length,
-          languages: languagePercentages.length,
-          totalCommits: totalCommits - SHOPIFY_COMMITS, // original
-          totalCommitsWithShopify: totalCommits, // with Shopify
-          includesPrivateRepos: !!userContributions,
-          restrictedContributions: userContributions?.restrictedContributionsCount || 0
-        })
-
-        // Hardcoded language percentages reflecting work at Shopify, IBM, and Squeak
+        // Hardcoded language percentages
         const languages: LanguageStat[] = [
           { name: 'Python', percentage: 30, color: getLanguageColor('Python') },
           { name: 'Ruby', percentage: 20, color: getLanguageColor('Ruby') },
@@ -121,7 +124,6 @@ const Wrapped: React.FC<WrappedProps> = ({ onClose }) => {
           { name: 'JavaScript', percentage: 7, color: getLanguageColor('JavaScript') },
         ]
 
-        // Use top repos by commits for top projects
         const topProjects: ProjectStat[] = topRepos.slice(0, 3).map((repo: any, index: number) => {
           const repoDetails = repos.find((r: any) => r.name === repo.name || repo.name.includes(r.name))
           return {
@@ -134,7 +136,7 @@ const Wrapped: React.FC<WrappedProps> = ({ onClose }) => {
 
         const activeDays = Math.min(365, repos.length * 15)
 
-        // Add Shopify to top repos if not already there
+        // Add Shopify to top repos
         const hasShopify = topRepos.some((repo: any) => 
           repo.name.toLowerCase().includes('shopify') || repo.name.toLowerCase().includes('checkout')
         )
@@ -163,8 +165,8 @@ const Wrapped: React.FC<WrappedProps> = ({ onClose }) => {
       } catch (error) {
         console.error('❌ Error fetching GitHub data:', error)
         setWrappedData({
-          totalCommits: 1280, // Includes Shopify contributions
-          totalPRs: 73, // Includes Shopify PRs
+          totalCommits: 1280,
+          totalPRs: 73,
           prodIncidents: 3,
           languages: [
             { name: 'TypeScript', percentage: 26, color: '#3178c6' },
@@ -190,7 +192,7 @@ const Wrapped: React.FC<WrappedProps> = ({ onClose }) => {
           peakDay: 'Tuesday',
           peakTime: '11 PM',
           repoCount: 16,
-          contributions: 1353, // Updated with Shopify
+          contributions: 1353,
         })
       } finally {
         setIsLoading(false)
@@ -200,28 +202,16 @@ const Wrapped: React.FC<WrappedProps> = ({ onClose }) => {
     fetchData()
   }, [])
 
-  const getLanguageColor = (language: string): string => {
-    const colors: { [key: string]: string } = {
-      'TypeScript': '#3178c6', 'JavaScript': '#f7df1e', 'Go': '#00add8',
-      'Python': '#3776ab', 'Java': '#ed8b00', 'C++': '#00599c',
-      'C': '#a8b9cc', 'Rust': '#000000', 'Ruby': '#cc342d',
-      'PHP': '#777bb4', 'Swift': '#fa7343', 'Kotlin': '#7f52ff',
-      'Dart': '#0175c2', 'HTML': '#e34c26', 'CSS': '#1572b6',
-      'Shell': '#89e051', 'Dockerfile': '#384d54', 'Makefile': '#427819',
-    }
-    return colors[language] || '#1ED760'
-  }
-
   const slides = [
-    { id: 0, component: <IntroSlide /> },
-    { id: 1, component: <HookSlide data={wrappedData} /> },
-    { id: 2, component: <GenresSlide languages={wrappedData.languages} /> },
-    { id: 3, component: <TopArtistsSlide /> },
-    { id: 4, component: <CodeHabitsSlide data={wrappedData} /> },
-    { id: 5, component: <SpecialMomentsSlide /> },
-    { id: 6, component: <TopReposSlide repos={wrappedData.topRepos} /> },
-    { id: 7, component: <PersonalitySlide languages={wrappedData.languages} data={wrappedData} /> },
-    { id: 8, component: <ShareSlide onClose={onClose} data={wrappedData} /> },
+    { id: 0, component: <IntroSlide />, bg: 'from-[#1ED760]/30 via-[#121212] to-[#000000]' },
+    { id: 1, component: <HookSlide data={wrappedData} />, bg: 'from-[#00D4FF]/30 via-[#121212] to-[#000000]' },
+    { id: 2, component: <GenresSlide languages={wrappedData.languages} />, bg: 'from-[#8B5CF6]/30 via-[#121212] to-[#000000]' },
+    { id: 3, component: <TopArtistsSlide />, bg: 'from-orange-500/30 via-[#121212] to-[#000000]' },
+    { id: 4, component: <CodeHabitsSlide data={wrappedData} />, bg: 'from-yellow-500/30 via-[#121212] to-[#000000]' },
+    { id: 5, component: <SpecialMomentsSlide />, bg: 'from-pink-500/30 via-[#121212] to-[#000000]' },
+    { id: 6, component: <TopReposSlide repos={wrappedData.topRepos} />, bg: 'from-emerald-500/30 via-[#121212] to-[#000000]' },
+    { id: 7, component: <PersonalitySlide languages={wrappedData.languages} data={wrappedData} />, bg: 'from-purple-500/30 via-[#121212] to-[#000000]' },
+    { id: 8, component: <ShareSlide onClose={onClose} data={wrappedData} />, bg: 'from-[#1ED760]/30 via-[#121212] to-[#000000]' },
   ]
 
   const handleNext = () => {
@@ -230,7 +220,7 @@ const Wrapped: React.FC<WrappedProps> = ({ onClose }) => {
       setTimeout(() => {
         setCurrentSlide(currentSlide + 1)
         setIsAnimating(false)
-      }, 300)
+      }, 400)
     }
   }
 
@@ -240,48 +230,81 @@ const Wrapped: React.FC<WrappedProps> = ({ onClose }) => {
       setTimeout(() => {
         setCurrentSlide(currentSlide - 1)
         setIsAnimating(false)
-      }, 300)
+      }, 400)
     }
   }
 
   if (isLoading) {
     return (
-      <div className="flex-1 overflow-hidden relative bg-gradient-to-br from-[#101010] via-[#1a0a2e] to-[#16213e] flex items-center justify-center">
+      <div className="fixed inset-0 z-[100] bg-black flex items-center justify-center">
         <div className="text-center">
           <Loader2 className="w-16 h-16 text-[#1ED760] animate-spin mx-auto mb-6" />
-          <p className="text-white text-2xl font-bold mb-2">Compiling your year...</p>
-          <p className="text-gray-400 text-sm">
-            {import.meta.env.VITE_GITHUB_TOKEN ? '🔐 Fetching real GitHub data' : '⚠️ Using mock data'}
-          </p>
+          <p className="text-white text-2xl font-bold mb-2 font-circular">Compiling your year...</p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="flex-1 overflow-hidden relative bg-gradient-to-br from-[#101010] via-[#1a0a2e] to-[#16213e]">
-      <div className="absolute top-6 right-6 z-[100]">
-        <Button variant="ghost" size="icon" onClick={onClose} className="text-white hover:bg-white/10 rounded-full">
-          <X className="w-6 h-6" />
+    <div className="fixed inset-0 z-[100] overflow-hidden bg-black text-white font-circular">
+      <div className="wrapped-grain opacity-30"></div>
+      
+      {/* Dynamic Background */}
+      <div 
+        className={`absolute inset-0 transition-colors duration-700 ease-in-out bg-gradient-to-br ${slides[currentSlide].bg}`} 
+      />
+
+      {/* Header Controls */}
+      <div className="absolute top-6 right-6 z-[110]">
+        <Button variant="ghost" size="icon" onClick={onClose} className="text-white/70 hover:text-white hover:bg-white/10 rounded-full transition-colors">
+          <X className="w-8 h-8" />
         </Button>
       </div>
 
-      <div className={`h-full flex items-center justify-center pb-24 transition-all duration-500 ${isAnimating ? 'opacity-0 scale-95' : 'opacity-100 scale-100'}`}>
+      {/* Main Content */}
+      <div className={`h-full w-full flex items-center justify-center pb-24 relative z-[105] transition-all duration-500 ${isAnimating ? 'opacity-0 scale-95 blur-sm' : 'opacity-100 scale-100 blur-0'}`}>
         {slides[currentSlide].component}
       </div>
 
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex items-center gap-6 z-[100]">
-        <Button variant="ghost" size="icon" onClick={handlePrevious} disabled={currentSlide === 0} className="text-white hover:bg-white/10 rounded-full disabled:opacity-20">
-          <ChevronLeft className="w-7 h-7" />
-        </Button>
-        <div className="flex gap-2">
+      {/* Navigation Controls */}
+      <div className="absolute bottom-8 left-0 right-0 flex flex-col items-center gap-6 z-[110]">
+        {/* Progress Bars */}
+        <div className="flex gap-2 w-full max-w-md px-4">
           {slides.map((_, i) => (
-            <button key={i} onClick={() => { setIsAnimating(true); setTimeout(() => { setCurrentSlide(i); setIsAnimating(false) }, 300) }} className={`h-2 rounded-full transition-all ${i === currentSlide ? 'w-10 bg-[#1ED760]' : 'w-2 bg-white/30'}`} />
+            <div 
+              key={i} 
+              onClick={() => { setIsAnimating(true); setTimeout(() => { setCurrentSlide(i); setIsAnimating(false) }, 300) }} 
+              className="h-1.5 flex-1 rounded-full bg-white/20 overflow-hidden cursor-pointer transition-all hover:h-2"
+            >
+              <div 
+                className={`h-full bg-white transition-all duration-300 ${i <= currentSlide ? 'w-full' : 'w-0'} ${i === currentSlide ? 'bg-white' : 'opacity-50'}`} 
+              />
+            </div>
           ))}
         </div>
-        <Button variant="ghost" size="icon" onClick={handleNext} disabled={currentSlide === slides.length - 1} className="text-white hover:bg-white/10 rounded-full disabled:opacity-20">
-          <ChevronRight className="w-7 h-7" />
-        </Button>
+
+        {/* Arrows */}
+        <div className="flex items-center gap-12">
+           <Button 
+            variant="ghost" 
+            size="icon" 
+            onClick={handlePrevious} 
+            disabled={currentSlide === 0} 
+            className="text-white/50 hover:text-white rounded-full disabled:opacity-10 hover:bg-white/10 w-12 h-12"
+           >
+            <ChevronLeft className="w-8 h-8" />
+          </Button>
+          
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            onClick={handleNext} 
+            disabled={currentSlide === slides.length - 1} 
+            className="text-white/50 hover:text-white rounded-full disabled:opacity-10 hover:bg-white/10 w-12 h-12"
+          >
+            <ChevronRight className="w-8 h-8" />
+          </Button>
+        </div>
       </div>
     </div>
   )
@@ -290,22 +313,18 @@ const Wrapped: React.FC<WrappedProps> = ({ onClose }) => {
 // SLIDE 1: Intro with pun
 const IntroSlide: React.FC = () => {
   return (
-    <div className="text-center px-8 max-w-5xl">
-      <div className="mb-12">
-        <div className="w-80 h-80 mx-auto bg-gradient-to-br from-[#1ED760] via-[#00D4FF] to-[#8B5CF6] rounded-3xl shadow-2xl flex items-center justify-center wrapped-blob wrapped-gradient relative overflow-hidden">
-          <div className="absolute inset-0 bg-black/20"></div>
-          <Code className="w-32 h-32 text-white z-10" />
+    <div className="text-center px-4 max-w-5xl wrapped-slide">
+      <div className="mb-12 relative">
+        <div className="w-64 h-64 md:w-80 md:h-80 mx-auto bg-gradient-to-br from-[#1ED760] via-[#00D4FF] to-[#8B5CF6] rounded-full blur-3xl opacity-50 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 animate-pulse"></div>
+        <div className="w-64 h-64 md:w-80 md:h-80 mx-auto bg-gradient-to-br from-[#1ED760] via-[#00D4FF] to-[#8B5CF6] rounded-[3rem] shadow-2xl flex items-center justify-center wrapped-blob wrapped-gradient relative overflow-hidden rotate-3 hover:rotate-6 transition-transform duration-700">
+          <Code className="w-32 h-32 text-white mix-blend-overlay" />
         </div>
       </div>
-      <h1 className="text-7xl md:text-8xl font-black text-white mb-8 wrapped-headline tracking-tight">
-        2025 WRAPPED
+      <h1 className="text-6xl md:text-9xl font-black text-white mb-8 wrapped-headline tracking-tighter">
+        2025<br/><span className="text-transparent bg-clip-text bg-gradient-to-r from-[#1ED760] to-[#00D4FF]">WRAPPED</span>
       </h1>
-      <p className="text-3xl md:text-4xl text-gray-300 mb-4">
-        It's been a year of <span className="text-[#1ED760] font-black">commits</span>,<br />
-        <span className="text-[#00D4FF] font-black">code reviews</span>, and <span className="text-[#8B5CF6] font-black">deploys</span>
-      </p>
-      <p className="text-xl text-gray-400 mt-8 italic">
-        Let's see what Saai's been building...
+      <p className="text-2xl md:text-4xl text-white/80 mb-4 font-medium">
+        It's been a year of commits, code reviews, and deploys.
       </p>
     </div>
   )
@@ -314,38 +333,37 @@ const IntroSlide: React.FC = () => {
 // SLIDE 2: Hook slide - overall contributions
 const HookSlide: React.FC<{ data: any }> = ({ data }) => {
   return (
-    <div className="text-center px-8 max-w-5xl">
-      <p className="text-[#1ED760] text-sm font-bold tracking-widest uppercase mb-6 wrapped-label">SAAI'S 2025 IN CODE</p>
-      <h1 className="text-7xl md:text-8xl font-black text-white mb-12 wrapped-headline tracking-tight leading-tight">
-        SAAI DIDN'T JUST<br />CODE THIS YEAR.<br />
-        <span className="text-[#1ED760]">HE SHIPPED.</span>
+    <div className="text-center px-4 max-w-6xl wrapped-slide w-full">
+      <p className="text-[#1ED760] text-sm font-bold tracking-widest uppercase mb-8 wrapped-label">YOUR YEAR IN CODE</p>
+      <h1 className="text-5xl md:text-8xl font-black text-white mb-16 wrapped-headline tracking-tighter leading-[0.9]">
+        YOU DIDN'T JUST<br />CODE THIS YEAR.<br />
+        <span className="text-[#1ED760]">YOU SHIPPED.</span>
       </h1>
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-        <div className="bg-gradient-to-br from-[#1ED760]/20 to-[#1ED760]/5 rounded-3xl p-8 border border-[#1ED760]/30">
-          <div className="text-6xl font-black text-[#1ED760] mb-3">
+      
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
+        <div className="bg-white/5 backdrop-blur-md rounded-3xl p-8 border border-white/10 hover:bg-white/10 transition-colors">
+          <div className="text-6xl font-black text-[#1ED760] mb-2 wrapped-stat">
             <CountUpNumber value={data.totalCommits} />
           </div>
-          <p className="text-gray-300 text-lg font-semibold">Commits</p>
+          <p className="text-white/60 font-bold uppercase tracking-wider text-sm">Commits</p>
         </div>
-        <div className="bg-gradient-to-br from-[#00D4FF]/20 to-[#00D4FF]/5 rounded-3xl p-8 border border-[#00D4FF]/30">
-          <div className="text-6xl font-black text-[#00D4FF] mb-3">
+        <div className="bg-white/5 backdrop-blur-md rounded-3xl p-8 border border-white/10 hover:bg-white/10 transition-colors delay-100">
+          <div className="text-6xl font-black text-[#00D4FF] mb-2 wrapped-stat">
             <CountUpNumber value={data.totalPRs} />
           </div>
-          <p className="text-gray-300 text-lg font-semibold">PRs Merged</p>
+          <p className="text-white/60 font-bold uppercase tracking-wider text-sm">PRs Merged</p>
         </div>
-        <div className="bg-gradient-to-br from-[#8B5CF6]/20 to-[#8B5CF6]/5 rounded-3xl p-8 border border-[#8B5CF6]/30">
-          <div className="text-6xl font-black text-[#8B5CF6] mb-3">
+        <div className="bg-white/5 backdrop-blur-md rounded-3xl p-8 border border-white/10 hover:bg-white/10 transition-colors delay-200">
+          <div className="text-6xl font-black text-[#8B5CF6] mb-2 wrapped-stat">
             <CountUpNumber value={data.repoCount} />
           </div>
-          <p className="text-gray-300 text-lg font-semibold">Repos</p>
+          <p className="text-white/60 font-bold uppercase tracking-wider text-sm">Repos Active</p>
         </div>
       </div>
-      <p className="text-gray-400 text-xl mt-12">
-        <span className="text-[#1ED760] font-bold"><CountUpNumber value={data.contributions} /></span> total contributions
-      </p>
-      <p className="text-gray-500 text-lg mt-4 italic">
-        (and broke prod only <span className="text-[#1ED760] font-bold">{data.prodIncidents}</span> times 👀)
-      </p>
+      
+      <div className="mt-12 text-xl text-white/50">
+        Top 1% of contributors in your timezone (probably)
+      </div>
     </div>
   )
 }
@@ -356,242 +374,159 @@ const GenresSlide: React.FC<{ languages: LanguageStat[] }> = ({ languages }) => 
   const topLang = languages[0]
   
   return (
-    <div className="text-center px-8 max-w-6xl w-full">
-      <p className="text-[#1ED760] text-sm font-bold tracking-widest uppercase mb-6 wrapped-label">SAAI'S TOP GENRE</p>
-      <h2 className="text-8xl md:text-9xl font-black text-white mb-8 wrapped-headline">{topLang.name.toUpperCase()}</h2>
-      <div className="text-7xl md:text-8xl font-black text-[#1ED760] wrapped-stat mb-12">
-        <CountUpNumber value={topLang.percentage} suffix="%" />
-      </div>
-      <div className="space-y-4 max-w-3xl mx-auto">
-        {languages.slice(0, 5).map((lang, i) => (
-          <div key={i} className="relative">
-            <div className="flex items-center justify-between mb-2 px-2">
-              <span className="text-white text-xl font-bold">{lang.name}</span>
-              <span className="text-gray-400 text-lg font-bold">{lang.percentage}%</span>
-            </div>
-            <div className="h-4 bg-black/30 rounded-full overflow-hidden">
-              <div className="h-full rounded-full wrapped-bar" style={{ width: `${lang.percentage}%`, backgroundColor: lang.color, transition: 'width 1.2s cubic-bezier(0.16, 1, 0.3, 1)' }} />
-            </div>
-          </div>
-        ))}
-      </div>
-      <p className="text-gray-400 text-xl mt-12 italic">
-        {topLang.name === 'TypeScript' ? 'Type safety is his love language' : 
-         topLang.name === 'Python' ? 'He speaks fluent snake 🐍' :
-         topLang.name === 'Go' ? 'Gopher life chose him' :
-         topLang.name === 'Java' ? 'Still brewing that coffee ☕' :
-         'He has great taste in syntax'}
-      </p>
-    </div>
-  )
-}
-
-// SLIDE 4: Top "Artists" (Companies/Projects from resume)
-const TopArtistsSlide: React.FC = () => {
-  const companies = [
-    { 
-      name: 'Shopify', 
-      role: 'Software Engineer Intern',
-      period: 'Sep - Dec 2025',
-      icon: '🛍️',
-      color: 'from-green-500 to-green-600',
-      highlight: '500M+ transactions'
-    },
-    { 
-      name: 'IBM', 
-      role: 'ML Engineer + SWE Intern',
-      period: 'Jan - Aug 2025',
-      icon: '💼',
-      color: 'from-blue-500 to-blue-600',
-      highlight: 'Kubernetes contributor'
-    },
-    { 
-      name: 'Squeak', 
-      role: 'Technical Founder',
-      period: 'Nov 2024 - May 2025',
-      icon: '🎯',
-      color: 'from-purple-500 to-purple-600',
-      highlight: '700+ users'
-    },
-    { 
-      name: 'Autotrader', 
-      role: 'Software Developer Intern',
-      period: 'Jan - May 2024',
-      icon: '🚗',
-      color: 'from-orange-500 to-red-500',
-      highlight: '1,500+ dealerships'
-    },
-  ]
-
-  return (
-    <div className="w-full max-w-6xl px-8">
-      <p className="text-[#1ED760] text-sm font-bold tracking-widest uppercase mb-6 text-center wrapped-label">TOP ARTISTS · COLLABS</p>
-      <h2 className="text-6xl md:text-7xl font-black text-white mb-12 text-center wrapped-headline">
-        WHERE SAAI<br />SHIPPED CODE
-      </h2>
-      <div className="space-y-6">
-        {companies.map((company, i) => (
-          <div key={i} className="wrapped-card-enter" style={{ animationDelay: `${i * 0.15}s` }}>
-            <div className={`bg-gradient-to-r ${company.color} p-1 rounded-3xl`}>
-              <div className="bg-[#0a0a0a] rounded-3xl p-6 md:p-8 flex items-center justify-between">
-                <div className="flex items-center gap-4 md:gap-6">
-                  <div className="text-4xl md:text-6xl">{company.icon}</div>
-                  <div>
-                    <h3 className="text-2xl md:text-3xl font-black text-white mb-1">{company.name}</h3>
-                    <p className="text-gray-400 text-base md:text-lg">{company.role}</p>
-                    <p className="text-[#1ED760] text-xs md:text-sm font-bold mt-1">{company.period}</p>
-                    <p className="text-gray-500 text-xs md:text-sm mt-1">{company.highlight}</p>
-                  </div>
-                </div>
-                <div className="text-4xl md:text-6xl font-black text-white opacity-20">#{i + 1}</div>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  )
-}
-
-// SLIDE 5: Code Habits (commit times)
-const CodeHabitsSlide: React.FC<{ data: any }> = ({ data }) => {
-  const timeBlocks = [
-    { time: '🌅 Morning (6am-12pm)', percentage: 15, color: '#FFA500' },
-    { time: '☀️ Afternoon (12pm-6pm)', percentage: 35, color: '#FFD700' },
-    { time: '🌆 Evening (6pm-10pm)', percentage: 30, color: '#FF6B6B' },
-    { time: '🌙 Night Owl (10pm-6am)', percentage: 20, color: '#8B5CF6' },
-  ]
-
-  return (
-    <div className="w-full max-w-5xl px-8 text-center">
-      <p className="text-[#1ED760] text-sm font-bold tracking-widest uppercase mb-6 wrapped-label">CODE HABITS · LISTENING PATTERNS</p>
-      <h2 className="text-6xl md:text-7xl font-black text-white mb-4 wrapped-headline">
-        SAAI CODED<br />LIKE THIS
-      </h2>
-      <p className="text-2xl text-gray-300 mb-12">
-        Most active: <span className="text-[#1ED760] font-black">{data.peakDay}s</span> at <span className="text-[#1ED760] font-black">{data.peakTime}</span>
-      </p>
-      
-      <div className="space-y-6 mb-12">
-        {timeBlocks.map((block, i) => (
-          <div key={i} className="wrapped-card-enter" style={{ animationDelay: `${i * 0.1}s` }}>
-            <div className="text-left mb-3 flex items-center justify-between px-2">
-              <span className="text-white text-lg font-bold">{block.time}</span>
-              <span className="text-gray-400 font-bold">{block.percentage}%</span>
-            </div>
-            <div className="h-6 bg-black/30 rounded-full overflow-hidden">
-              <div 
-                className="h-full rounded-full wrapped-bar flex items-center justify-end pr-4" 
-                style={{ 
-                  width: `${block.percentage}%`, 
-                  backgroundColor: block.color,
-                  transition: 'width 1.2s cubic-bezier(0.16, 1, 0.3, 1)'
-                }}
-              >
-                <span className="text-white text-xs font-bold">{block.percentage}%</span>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      <div className="bg-gradient-to-br from-[#8B5CF6]/20 to-[#8B5CF6]/5 rounded-3xl p-8 border border-[#8B5CF6]/30">
-        <Coffee className="w-12 h-12 text-[#8B5CF6] mx-auto mb-4" />
-        <p className="text-2xl text-white font-bold">Late Night Coder</p>
-        <p className="text-gray-400 mt-2">Saai's commits peaked after 10 PM</p>
-        <p className="text-[#8B5CF6] font-bold mt-2">☕ Coffee level: MAXIMUM</p>
-      </div>
-    </div>
-  )
-}
-
-// SLIDE 6: Special Moments (from resume)
-const SpecialMomentsSlide: React.FC = () => {
-  const moments = [
-    {
-      icon: <Trophy className="w-12 h-12" />,
-      title: 'Squeak Launch',
-      description: '700+ users, revenue-generating platform',
-      color: 'from-yellow-500 to-orange-500',
-      emoji: '🚀'
-    },
-    {
-      icon: <Zap className="w-12 h-12" />,
-      title: 'Shopify Impact',
-      description: 'Reduced validation errors by 55%',
-      color: 'from-green-500 to-emerald-500',
-      emoji: '⚡'
-    },
-    {
-      icon: <Code className="w-12 h-12" />,
-      title: 'AI Debugging Assistant',
-      description: 'Built FastMCP AI agent for z/OS',
-      color: 'from-blue-500 to-cyan-500',
-      emoji: '🤖'
-    },
-    {
-      icon: <Heart className="w-12 h-12" />,
-      title: '$1M+ Revenue',
-      description: 'IBM Z/OS debugger REST APIs',
-      color: 'from-purple-500 to-pink-500',
-      emoji: '💰'
-    },
-  ]
-
-  return (
-    <div className="w-full max-w-6xl px-8">
-      <p className="text-[#1ED760] text-sm font-bold tracking-widest uppercase mb-6 text-center wrapped-label">SPECIAL MOMENTS · PEAK TRACKS</p>
-      <h2 className="text-6xl md:text-7xl font-black text-white mb-12 text-center wrapped-headline">
-        SAAI'S BIGGEST<br />HITS IN 2025
-      </h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-        {moments.map((moment, i) => (
-          <div key={i} className="wrapped-card-enter" style={{ animationDelay: `${i * 0.15}s` }}>
-            <div className={`bg-gradient-to-br ${moment.color} p-1 rounded-3xl`}>
-              <div className="bg-[#0a0a0a] rounded-3xl p-6 md:p-8 text-center h-full">
-                <div className="text-5xl md:text-6xl mb-4">{moment.emoji}</div>
-                <h3 className="text-xl md:text-2xl font-black text-white mb-2 md:mb-3">{moment.title}</h3>
-                <p className="text-gray-400 text-sm md:text-base">{moment.description}</p>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-      <div className="mt-12 text-center">
-        <p className="text-3xl text-gray-300">
-          He didn't just write code.<br />
-          <span className="text-[#1ED760] font-black">He made an impact.</span>
+    <div className="px-8 max-w-6xl w-full grid grid-cols-1 md:grid-cols-2 gap-12 items-center wrapped-slide">
+      <div className="text-left">
+        <p className="text-[#8B5CF6] text-sm font-bold tracking-widest uppercase mb-4 wrapped-label">TOP GENRE</p>
+        <h2 className="text-7xl md:text-9xl font-black text-white mb-6 wrapped-headline tracking-tighter leading-none">
+          {topLang.name.toUpperCase()}
+        </h2>
+        <div className="text-3xl font-bold text-[#8B5CF6] mb-8">
+          You spent <CountUpNumber value={topLang.percentage} suffix="%" /> of your time here.
+        </div>
+        <p className="text-white/60 text-xl italic max-w-md">
+           {topLang.name === 'TypeScript' ? '"If it doesn\'t have types, I don\'t want it."' : 
+            topLang.name === 'Python' ? '"Indentations are my love language."' :
+            topLang.name === 'Go' ? '"Simplicity is the ultimate sophistication."' :
+            'You have great taste in syntax.'}
         </p>
       </div>
+
+      <div className="space-y-3 w-full">
+        {languages.slice(0, 5).map((lang, i) => (
+          <div key={i} className="group relative h-16 md:h-20 w-full bg-white/5 rounded-lg overflow-hidden flex items-center px-6 hover:bg-white/10 transition-colors border border-white/5 hover:border-white/20 wrapped-card-enter" style={{ animationDelay: `${i * 0.1}s` }}>
+            <div className="absolute left-0 top-0 bottom-0 bg-current opacity-20 transition-all duration-1000 group-hover:opacity-30 wrapped-bar" style={{ width: `${lang.percentage}%`, color: lang.color }}></div>
+            <div className="relative z-10 flex justify-between w-full items-center">
+               <div className="flex items-center gap-4">
+                 <span className="text-white/40 font-bold text-xl w-6">{i + 1}</span>
+                 <span className="text-white font-bold text-xl md:text-2xl">{lang.name}</span>
+               </div>
+               <span className="text-white/60 font-bold">{lang.percentage}%</span>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   )
 }
 
-// SLIDE 7: Top Repos
+// SLIDE 4: Top Artists
+const TopArtistsSlide: React.FC = () => {
+  const companies = [
+    { name: 'Shopify', role: 'SWE Intern', period: 'Fall 2025', image: '/images/Shopify.png' },
+    { name: 'IBM', role: 'ML Engineer', period: 'Summer 2025', image: '/images/IBM.png' },
+    { name: 'Squeak', role: 'Founder', period: '2024-2025', image: '/images/Squeak.png' },
+    { name: 'Autotrader', role: 'Developer', period: 'Winter 2024', image: '/images/Autotrader.ca.png' },
+  ]
+
+  return (
+    <div className="text-center w-full max-w-4xl wrapped-slide">
+      <p className="text-orange-500 text-sm font-bold tracking-widest uppercase mb-8 wrapped-label">TOP ARTISTS</p>
+      <h2 className="text-6xl md:text-8xl font-black text-white mb-16 wrapped-headline tracking-tight">
+        THE LINEUP
+      </h2>
+      
+      <div className="grid grid-cols-2 gap-6">
+        {companies.map((company, i) => (
+          <div key={i} className="bg-[#181818] hover:bg-[#282828] p-6 rounded-2xl transition-all duration-300 group text-left wrapped-card-enter cursor-pointer" style={{ animationDelay: `${i * 0.1}s` }}>
+             <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center text-3xl mb-4 group-hover:scale-110 transition-transform overflow-hidden p-2">
+                {company.image ? (
+                  <img src={company.image} alt={company.name} className="w-full h-full object-contain" />
+                ) : (
+                  <span className="text-2xl">🏢</span>
+                )}
+             </div>
+             <h3 className="text-2xl font-black text-white mb-1">{company.name}</h3>
+             <p className="text-white/60 font-medium">{company.role}</p>
+             <p className="text-white/40 text-sm mt-4 uppercase tracking-wider font-bold">{company.period}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+// SLIDE 5: Code Habits
+const CodeHabitsSlide: React.FC<{ data: any }> = ({ data }) => {
+  return (
+    <div className="w-full max-w-5xl px-8 flex flex-col md:flex-row items-center gap-12 wrapped-slide">
+      <div className="flex-1 text-left">
+         <p className="text-yellow-500 text-sm font-bold tracking-widest uppercase mb-6 wrapped-label">LISTENING HABITS</p>
+         <h2 className="text-6xl md:text-8xl font-black text-white mb-8 wrapped-headline leading-none">
+           NIGHT<br/>OWL
+         </h2>
+         <div className="bg-white/10 rounded-3xl p-8 backdrop-blur-md border border-white/10">
+            <p className="text-2xl text-white font-bold mb-2">You were most active on {data.peakDay}s.</p>
+            <p className="text-white/60 text-lg">Your commits peaked around {data.peakTime}, proving that sleep is indeed optional for shipping.</p>
+         </div>
+      </div>
+      
+      <div className="flex-1 w-full max-w-md">
+         <div className="aspect-square rounded-full bg-gradient-to-b from-yellow-500 to-orange-600 p-1 animate-spin-slow" style={{ animationDuration: '20s' }}>
+            <div className="w-full h-full bg-black rounded-full flex items-center justify-center relative overflow-hidden">
+               <div className="absolute inset-0 bg-[conic-gradient(from_0deg,transparent_0_25%,#Eab308_40%,transparent_45%)] opacity-20"></div>
+               <div className="w-4 h-4 bg-white rounded-full z-10"></div>
+               <div className="absolute w-[45%] h-1 bg-white/50 top-1/2 left-1/2 origin-left -rotate-45"></div>
+               <div className="absolute w-[30%] h-1 bg-white top-1/2 left-1/2 origin-left rotate-[120deg]"></div>
+               
+               {/* Labels */}
+               <span className="absolute top-4 text-xs font-bold text-white/50">12AM</span>
+               <span className="absolute bottom-4 text-xs font-bold text-white/50">12PM</span>
+               <span className="absolute right-4 text-xs font-bold text-white/50">6AM</span>
+               <span className="absolute left-4 text-xs font-bold text-white/50">6PM</span>
+            </div>
+         </div>
+      </div>
+    </div>
+  )
+}
+
+// SLIDE 6: Special Moments
+const SpecialMomentsSlide: React.FC = () => {
+  const moments = [
+    { title: 'Launched Squeak', desc: '700+ users', color: 'text-yellow-400' },
+    { title: 'Shopify Impact', desc: '-55% Validation Errors', color: 'text-green-400' },
+    { title: 'IBM Revenue', desc: '$1M+ Generated', color: 'text-blue-400' },
+  ]
+
+  return (
+    <div className="text-center w-full max-w-5xl wrapped-slide">
+      <h2 className="text-6xl md:text-8xl font-black text-white mb-16 wrapped-headline">
+        YOUR TOP<br/>MOMENTS
+      </h2>
+      
+      <div className="space-y-8">
+        {moments.map((m, i) => (
+          <div key={i} className="relative overflow-hidden group cursor-pointer wrapped-card-enter" style={{ animationDelay: `${i * 0.2}s` }}>
+            <div className="absolute inset-0 bg-gradient-to-r from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            <div className="flex items-baseline justify-between border-b border-white/20 pb-4 group-hover:border-white transition-colors">
+               <h3 className={`text-4xl md:text-6xl font-black ${m.color} opacity-80 group-hover:opacity-100 transition-opacity`}>{m.title}</h3>
+               <p className="text-xl md:text-2xl font-bold text-white/60 group-hover:text-white transition-colors">{m.desc}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+// SLIDE 7: Top Repos (List view style)
 const TopReposSlide: React.FC<{ repos: Array<{ name: string; commits: number }> }> = ({ repos }) => {
   return (
-    <div className="w-full max-w-5xl px-8">
-      <p className="text-[#1ED760] text-sm font-bold tracking-widest uppercase mb-8 text-center wrapped-label">TOP TRACKS · REPOS</p>
-      <h2 className="text-6xl md:text-7xl font-black text-white mb-12 text-center wrapped-headline">
-        SAAI'S MOST<br />PLAYED REPOS
-      </h2>
-      <div className="space-y-4">
+    <div className="w-full max-w-4xl px-8 wrapped-slide">
+      <p className="text-emerald-400 text-sm font-bold tracking-widest uppercase mb-8 wrapped-label">ON REPEAT</p>
+      
+      <div className="flex flex-col gap-4">
         {repos.map((repo, i) => (
-          <div key={i} className="wrapped-card-enter" style={{ animationDelay: `${i * 0.1}s` }}>
-            <div className="bg-gradient-to-r from-black/40 to-black/20 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-[#1ED760]/50 transition-all flex items-center justify-between hover:scale-[1.02]">
-              <div className="flex items-center gap-6">
-                <div className="w-16 h-16 bg-gradient-to-br from-[#1ED760] to-[#00D4FF] rounded-xl flex items-center justify-center shadow-lg">
-                  <Github className="w-8 h-8 text-white" />
-                </div>
-                <div>
-                  <h3 className="text-2xl font-black text-white">{repo.name}</h3>
-                  <p className="text-gray-400">
-                    <CountUpNumber value={repo.commits} /> commits · On repeat 🔁
-                  </p>
-                </div>
-              </div>
-              <span className="text-5xl font-black text-[#1ED760]">#{i + 1}</span>
+          <div key={i} className="flex items-center gap-6 p-4 rounded-xl hover:bg-white/10 transition-all group wrapped-card-enter" style={{ animationDelay: `${i * 0.1}s` }}>
+            <span className="text-xl font-bold text-emerald-400 w-6 text-center">{i + 1}</span>
+            <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-teal-600 rounded flex items-center justify-center text-black font-bold shadow-lg group-hover:scale-105 transition-transform">
+               <Github className="w-6 h-6" />
             </div>
+            <div className="flex-1">
+               <h3 className="text-2xl font-bold text-white mb-1 group-hover:text-emerald-400 transition-colors">{repo.name}</h3>
+               <p className="text-white/50 text-sm font-medium">{repo.commits} plays (commits)</p>
+            </div>
+            <div className="hidden md:block text-white/30 font-bold text-sm tracking-wider">2025</div>
           </div>
         ))}
       </div>
@@ -602,74 +537,31 @@ const TopReposSlide: React.FC<{ repos: Array<{ name: string; commits: number }> 
 // SLIDE 8: Personality
 const PersonalitySlide: React.FC<{ languages: LanguageStat[]; data: any }> = ({ languages, data }) => {
   const topLang = languages[0]?.name || 'Code'
-  
-  const personalities: { [key: string]: { title: string; description: string; traits: string[] } } = {
-    'TypeScript': {
-      title: 'THE BACKEND AI ARCHITECT',
-      description: 'Saai builds intelligent backend systems that scale. From AI-powered debugging to LLM pipelines—he architects the future.',
-      traits: ['FastMCP protocol expert', 'Distributed systems', 'AI/ML integration']
-    },
-    'Ruby': {
-      title: 'THE RAILS PERFORMANCE ENGINEER',
-      description: 'From Shopify\'s checkout to enterprise systems, Saai optimizes Rails at massive scale.',
-      traits: ['500M+ transactions/day', '55% error reduction', 'GraphQL optimization']
-    },
-    'Go': {
-      title: 'THE BACKEND SYSTEMS ARCHITECT',
-      description: 'Simple, elegant, blazing fast. Saai builds distributed backend systems and AI pipelines with Go.',
-      traits: ['Microservices at scale', 'AWS Lambda/SQS', 'Story generation engine']
-    },
-    'Python': {
-      title: 'THE AI SYSTEMS ENGINEER',
-      description: 'From FastMCP servers to ML models, Saai architects AI-powered backend systems that solve real problems.',
-      traits: ['Model Context Protocol', 'RAG pipelines', 'AI debugging assistant']
-    },
-    'Java': {
-      title: 'THE ENTERPRISE BACKEND ENGINEER',
-      description: 'Saai builds production-grade backend systems that generate millions. REST APIs, CI/CD, and enterprise architecture.',
-      traits: ['$1M+ revenue systems', 'JAX-RS expert', 'Security-first mindset']
-    },
-    'default': {
-      title: 'THE BACKEND SYSTEMS BUILDER',
-      description: 'From AI pipelines to distributed systems—Saai architects and ships production backend code that scales.',
-      traits: ['Multi-language backend expert', 'AI/ML integration', 'Systems thinking']
-    }
+  const personalities: { [key: string]: string } = {
+    'TypeScript': 'THE ARCHITECT',
+    'Ruby': 'THE OPTIMIZER',
+    'Go': 'THE MINIMALIST',
+    'Python': 'THE SCIENTIST',
+    'Java': 'THE ENTERPRISE',
   }
+  const title = personalities[topLang] || 'THE BUILDER'
 
-  const personality = personalities[topLang] || personalities['default']
-  
   return (
-    <div className="text-center px-8 max-w-5xl">
-      <p className="text-[#1ED760] text-sm font-bold tracking-widest uppercase mb-8 wrapped-label">SAAI'S DEV PERSONALITY · MUSIC PROFILE</p>
-      <h2 className="text-7xl md:text-8xl font-black text-white mb-12 wrapped-headline leading-tight">
-        {personality.title}
+    <div className="text-center px-8 max-w-5xl wrapped-slide">
+      <div className="w-48 h-48 mx-auto mb-8 rounded-full bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 p-1 animate-spin-slow" style={{ animationDuration: '10s' }}>
+         <div className="w-full h-full rounded-full bg-black flex items-center justify-center overflow-hidden relative">
+            <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20"></div>
+            <Zap className="w-20 h-20 text-white" />
+         </div>
+      </div>
+      
+      <p className="text-purple-400 text-sm font-bold tracking-widest uppercase mb-4 wrapped-label">YOUR CODING PERSONALITY</p>
+      <h2 className="text-6xl md:text-8xl font-black text-white mb-8 wrapped-headline tracking-tight">
+        {title}
       </h2>
-      <div className="bg-gradient-to-br from-[#1ED760]/20 to-[#00D4FF]/20 rounded-3xl p-12 border border-[#1ED760]/30 mb-8">
-        <p className="text-2xl text-gray-200 leading-relaxed mb-8">
-          {personality.description}
-        </p>
-        <div className="flex flex-wrap justify-center gap-3">
-          {personality.traits.map((trait, i) => (
-            <span key={i} className="px-5 py-2 bg-white/10 text-white rounded-full text-sm font-bold border border-white/20">
-              {trait}
-            </span>
-          ))}
-        </div>
-      </div>
-      <div className="grid grid-cols-3 gap-6 text-center">
-        <div>
-          <div className="text-4xl font-black text-[#1ED760]"><CountUpNumber value={data.activeDays} /></div>
-          <p className="text-gray-400 text-sm mt-2">Active Days</p>
-        </div>
-        <div>
-          <div className="text-4xl font-black text-[#00D4FF]"><CountUpNumber value={languages.length} /></div>
-          <p className="text-gray-400 text-sm mt-2">Languages Used</p>
-        </div>
-        <div>
-          <div className="text-4xl font-black text-[#8B5CF6]"><CountUpNumber value={data.repoCount} /></div>
-          <p className="text-gray-400 text-sm mt-2">Projects Built</p>
-        </div>
-      </div>
+      <p className="text-2xl text-white/80 max-w-2xl mx-auto leading-relaxed">
+        You don't just write code; you craft systems. With {topLang} as your main instrument, you orchestrate complex logic into simple, beautiful solutions.
+      </p>
     </div>
   )
 }
@@ -677,64 +569,39 @@ const PersonalitySlide: React.FC<{ languages: LanguageStat[]; data: any }> = ({ 
 // SLIDE 9: Share
 const ShareSlide: React.FC<{ onClose: () => void; data: any }> = ({ onClose, data }) => {
   return (
-    <div className="text-center px-8 max-w-5xl">
-      <h2 className="text-7xl md:text-8xl font-black text-white mb-8 wrapped-headline leading-tight">
-        THAT'S SAAI'S<br />2025 WRAPPED
-      </h2>
-      
-      {/* Summary Card */}
-      <div className="bg-gradient-to-br from-[#1ED760] via-[#00D4FF] to-[#8B5CF6] p-1 rounded-3xl mb-12 wrapped-gradient">
-        <div className="bg-[#0a0a0a] rounded-3xl p-8">
-          <div className="grid grid-cols-3 gap-6 mb-6">
-            <div>
-              <div className="text-5xl font-black text-[#1ED760]">{data.totalCommits}</div>
-              <p className="text-gray-400 text-sm mt-1">Commits</p>
-            </div>
-            <div>
-              <div className="text-5xl font-black text-[#00D4FF]">{data.totalPRs}</div>
-              <p className="text-gray-400 text-sm mt-1">PRs</p>
-            </div>
-            <div>
-              <div className="text-5xl font-black text-[#8B5CF6]">{data.repoCount}</div>
-              <p className="text-gray-400 text-sm mt-1">Repos</p>
-            </div>
-          </div>
-          <p className="text-gray-300 text-lg">
-            Built amazing things. Shipped real code.<br />
-            <span className="text-white font-bold">Ready for 2026.</span>
-          </p>
+    <div className="text-center px-8 max-w-5xl wrapped-slide">
+      <div className="bg-gradient-to-br from-[#1ED760] via-[#00D4FF] to-[#8B5CF6] p-1 rounded-[2.5rem] shadow-2xl mb-12 rotate-1 hover:rotate-0 transition-transform duration-500">
+        <div className="bg-black rounded-[2.4rem] p-12 md:p-16 relative overflow-hidden">
+           <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay"></div>
+           <div className="relative z-10">
+              <p className="text-white/50 font-bold tracking-widest uppercase mb-2">MY 2025 WRAPPED</p>
+              <h2 className="text-5xl md:text-7xl font-black text-white mb-8 wrapped-headline">SAAI ARORA</h2>
+              
+              <div className="grid grid-cols-3 gap-4 text-left">
+                 <div>
+                    <div className="text-4xl font-black text-[#1ED760]"><CountUpNumber value={data.totalCommits} /></div>
+                    <p className="text-white/50 text-sm font-bold uppercase">Commits</p>
+                 </div>
+                 <div>
+                    <div className="text-4xl font-black text-[#00D4FF]"><CountUpNumber value={data.totalPRs} /></div>
+                    <p className="text-white/50 text-sm font-bold uppercase">PRs</p>
+                 </div>
+                 <div>
+                    <div className="text-4xl font-black text-[#8B5CF6]"><CountUpNumber value={data.repoCount} /></div>
+                    <p className="text-white/50 text-sm font-bold uppercase">Repos</p>
+                 </div>
+              </div>
+           </div>
         </div>
       </div>
 
-      <p className="text-2xl text-gray-300 mb-12">
-        Thanks for building amazing things this year.<br />
-        Here's to shipping even more in 2026! 🚀
-      </p>
-      
       <div className="flex flex-col md:flex-row gap-4 justify-center">
-        <Button variant="spotify" size="lg" onClick={onClose} className="px-12 py-6 text-xl font-bold rounded-full">
-          Back to Portfolio
+        <Button onClick={onClose} className="bg-white text-black hover:bg-gray-200 px-8 py-6 rounded-full font-bold text-lg tracking-wide transform hover:scale-105 transition-all">
+          BACK TO PORTFOLIO
         </Button>
-        <Button variant="outline" size="lg" onClick={() => window.open('https://github.com/saai151', '_blank')} className="px-12 py-6 text-xl font-bold rounded-full border-2 border-white/20 text-white hover:bg-white/10">
-          <Github className="w-6 h-6 mr-3" />
-          View on GitHub
-        </Button>
-        <Button 
-          variant="outline" 
-          size="lg" 
-          onClick={() => {
-            if (navigator.share) {
-              navigator.share({
-                title: "Saai's 2025 Dev Wrapped",
-                text: `I made ${data.totalCommits} commits and shipped ${data.totalPRs} PRs in 2025!`,
-                url: window.location.href
-              })
-            }
-          }}
-          className="px-12 py-6 text-xl font-bold rounded-full border-2 border-[#1ED760] text-[#1ED760] hover:bg-[#1ED760]/10"
-        >
-          <Share2 className="w-6 h-6 mr-3" />
-          Share
+        <Button variant="outline" onClick={() => window.open('https://github.com/saai151', '_blank')} className="border-white/20 text-white hover:bg-white/10 px-8 py-6 rounded-full font-bold text-lg tracking-wide">
+          <Github className="w-5 h-5 mr-2" />
+          GITHUB
         </Button>
       </div>
     </div>
