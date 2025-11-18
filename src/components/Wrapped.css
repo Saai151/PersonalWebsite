@@ -78,7 +78,7 @@
   height: 200vh;
   pointer-events: none;
   z-index: 50;
-  background: transparent url('http://assets.iceable.com/img/noise-transparent.png') repeat 0 0;
+  background: transparent url('https://assets.iceable.com/img/noise-transparent.png') repeat 0 0;
   background-repeat: repeat;
   animation: grainMove 8s steps(10) infinite;
   opacity: 0.5;
