@@ -120,20 +120,6 @@ const Sidebar: React.FC<SidebarProps> = ({ onWrappedClick, onNavClick, isWrapped
               </div>
             </div>
 
-            {/* Projects */}
-            <div 
-              onClick={(e) => handleNavClick('#projects', e)}
-              className="flex items-center gap-3 p-2 rounded-md hover:bg-[#1a1a1a] cursor-pointer group"
-            >
-              <div className="w-12 h-12 bg-[#282828] rounded-md flex items-center justify-center flex-shrink-0">
-                <span className="text-xl">🚀</span>
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="font-bold text-white truncate group-hover:text-spotify-green transition-colors">Projects</p>
-                <p className="text-sm text-spotify-text-secondary truncate">Discography</p>
-              </div>
-            </div>
-
             {/* Skills */}
             <div 
               onClick={(e) => handleNavClick('#skills', e)}

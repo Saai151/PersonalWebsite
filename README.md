@@ -62,7 +62,6 @@ npm run preview
 │   │   ├── Hero.tsx          # Profile hero section
 │   │   ├── Education.tsx     # Education section
 │   │   ├── Experience.tsx    # Work experience cards
-│   │   ├── Projects.tsx       # Projects showcase
 │   │   ├── Skills.tsx        # Technical skills
 │   │   └── PlayerBar.tsx     # Bottom music player bar
 │   ├── lib/

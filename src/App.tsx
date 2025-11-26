@@ -6,9 +6,9 @@ import Hero from './components/Hero'
 import About from './components/About'
 import Education from './components/Education'
 import Experience from './components/Experience'
-import Projects from './components/Projects'
 import Skills from './components/Skills'
 import Wrapped from './components/Wrapped'
+import WrappedNotification from './components/WrappedNotification'
 import './App.css'
 
 function App() {
@@ -107,9 +107,6 @@ function App() {
               <div id="experience">
                 <Experience />
               </div>
-              <div id="projects">
-                <Projects />
-              </div>
               <div id="skills">
                 <Skills />
               </div>
@@ -118,6 +115,13 @@ function App() {
         )}
       </div>
       <Analytics />
+      
+      {!showWrapped && (
+        <WrappedNotification 
+          onOpen={() => setShowWrapped(true)} 
+          delay={3000}
+        />
+      )}
     </div>
   )
 }

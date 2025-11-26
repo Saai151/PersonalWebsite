@@ -28,7 +28,6 @@ const PlayerBar: React.FC = () => {
             case 'about': title = 'About Me'; artist = 'Bio'; break;
             case 'education': title = 'Education'; artist = 'University of Waterloo'; break;
             case 'experience': title = 'Experience'; artist = 'Career History'; break;
-            case 'projects': title = 'Discography'; artist = 'Projects'; break;
             case 'skills': title = 'Tech Stack'; artist = 'Skills'; break;
           }
           
