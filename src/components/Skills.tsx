@@ -38,27 +38,27 @@ const Skills: React.FC = () => {
   return (
     <section className="mb-12">
       {skillCategories.map((category, idx) => (
-        <div key={idx} className="mb-8 last:mb-0">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-2xl font-bold text-white">{category.title}</h2>
-            <span className="text-sm font-bold text-spotify-text-secondary uppercase tracking-widest hover:underline cursor-pointer">
+        <div key={idx} className="mb-6 md:mb-8 last:mb-0">
+          <div className="flex items-center justify-between mb-3 md:mb-4">
+            <h2 className="text-xl md:text-2xl font-bold text-white">{category.title}</h2>
+            <span className="text-xs md:text-sm font-bold text-spotify-text-secondary uppercase tracking-widest hover:underline cursor-pointer hidden sm:block">
               Show All
             </span>
           </div>
           
-          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-4">
+          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2 md:gap-4">
             {category.skills.map((skill, i) => (
               <div 
                 key={i} 
-                className="bg-[#181818] hover:bg-[#282828] p-4 rounded-lg transition-all duration-300 cursor-pointer group flex flex-col items-center gap-3 hover-lift animate-fade-in-up"
+                className="bg-[#181818] hover:bg-[#282828] p-2 md:p-4 rounded-lg transition-all duration-300 cursor-pointer group flex flex-col items-center gap-2 md:gap-3 hover-lift animate-fade-in-up"
                 style={{ animationDelay: `${(idx * 5 + i) * 50}ms` }}
               >
-                <div className={`w-24 h-24 rounded-full bg-gradient-to-br ${getGradient(skill)} shadow-lg group-hover:shadow-xl transition-shadow flex items-center justify-center`}>
-                  <span className="text-2xl font-bold text-white drop-shadow-md">{getInitials(skill)}</span>
+                <div className={`w-14 h-14 md:w-24 md:h-24 rounded-full bg-gradient-to-br ${getGradient(skill)} shadow-lg group-hover:shadow-xl transition-shadow flex items-center justify-center`}>
+                  <span className="text-sm md:text-2xl font-bold text-white drop-shadow-md">{getInitials(skill)}</span>
                 </div>
                 <div className="text-center">
-                  <h3 className="font-bold text-white text-sm truncate w-full">{skill}</h3>
-                  <p className="text-xs text-spotify-text-secondary mt-1">Skill</p>
+                  <h3 className="font-bold text-white text-xs md:text-sm truncate w-full">{skill}</h3>
+                  <p className="text-[10px] md:text-xs text-spotify-text-secondary mt-0.5 md:mt-1 hidden sm:block">Skill</p>
                 </div>
               </div>
             ))}

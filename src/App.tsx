@@ -88,7 +88,11 @@ function App() {
         isWrappedOpen={showWrapped}
       />
       <div className="flex flex-col flex-1 overflow-hidden md:ml-[280px] bg-[#121212] relative">
-        <Header />
+        <Header 
+          onWrappedClick={() => setShowWrapped(true)}
+          onNavClick={handleNavClick}
+          isWrappedOpen={showWrapped}
+        />
         {showWrapped ? (
           <Wrapped onClose={() => setShowWrapped(false)} />
         ) : (

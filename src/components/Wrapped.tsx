@@ -253,26 +253,26 @@ const Wrapped: React.FC<WrappedProps> = ({ onClose }) => {
       />
 
       {/* Header Controls */}
-      <div className="absolute top-6 right-6 z-[110]">
+      <div className="absolute top-4 right-4 md:top-6 md:right-6 z-[110]">
         <Button variant="ghost" size="icon" onClick={onClose} className="text-white/70 hover:text-white hover:bg-white/10 rounded-full transition-colors">
-          <X className="w-8 h-8" />
+          <X className="w-6 h-6 md:w-8 md:h-8" />
         </Button>
       </div>
 
       {/* Main Content */}
-      <div className={`h-full w-full flex items-center justify-center pb-24 relative z-[105] transition-all duration-500 ${isAnimating ? 'opacity-0 scale-95 blur-sm' : 'opacity-100 scale-100 blur-0'}`}>
+      <div className={`h-full w-full flex items-center justify-center pb-20 md:pb-24 pt-12 md:pt-0 relative z-[105] transition-all duration-500 ${isAnimating ? 'opacity-0 scale-95 blur-sm' : 'opacity-100 scale-100 blur-0'}`}>
         {slides[currentSlide].component}
       </div>
 
       {/* Navigation Controls */}
-      <div className="absolute bottom-8 left-0 right-0 flex flex-col items-center gap-6 z-[110]">
+      <div className="absolute bottom-4 md:bottom-8 left-0 right-0 flex flex-col items-center gap-3 md:gap-6 z-[110]">
         {/* Progress Bars */}
-        <div className="flex gap-2 w-full max-w-md px-4">
+        <div className="flex gap-1 md:gap-2 w-full max-w-md px-4">
           {slides.map((_, i) => (
             <div 
               key={i} 
               onClick={() => { setIsAnimating(true); setTimeout(() => { setCurrentSlide(i); setIsAnimating(false) }, 300) }} 
-              className="h-1.5 flex-1 rounded-full bg-white/20 overflow-hidden cursor-pointer transition-all hover:h-2"
+              className="h-1 md:h-1.5 flex-1 rounded-full bg-white/20 overflow-hidden cursor-pointer transition-all hover:h-1.5 md:hover:h-2"
             >
               <div 
                 className={`h-full bg-white transition-all duration-300 ${i <= currentSlide ? 'w-full' : 'w-0'} ${i === currentSlide ? 'bg-white' : 'opacity-50'}`} 
@@ -282,15 +282,15 @@ const Wrapped: React.FC<WrappedProps> = ({ onClose }) => {
         </div>
 
         {/* Arrows */}
-        <div className="flex items-center gap-12">
+        <div className="flex items-center gap-8 md:gap-12">
            <Button 
             variant="ghost" 
             size="icon" 
             onClick={handlePrevious} 
             disabled={currentSlide === 0} 
-            className="text-white/50 hover:text-white rounded-full disabled:opacity-10 hover:bg-white/10 w-12 h-12"
+            className="text-white/50 hover:text-white rounded-full disabled:opacity-10 hover:bg-white/10 w-10 h-10 md:w-12 md:h-12"
            >
-            <ChevronLeft className="w-8 h-8" />
+            <ChevronLeft className="w-6 h-6 md:w-8 md:h-8" />
           </Button>
           
           <Button 
@@ -298,9 +298,9 @@ const Wrapped: React.FC<WrappedProps> = ({ onClose }) => {
             size="icon" 
             onClick={handleNext} 
             disabled={currentSlide === slides.length - 1} 
-            className="text-white/50 hover:text-white rounded-full disabled:opacity-10 hover:bg-white/10 w-12 h-12"
+            className="text-white/50 hover:text-white rounded-full disabled:opacity-10 hover:bg-white/10 w-10 h-10 md:w-12 md:h-12"
           >
-            <ChevronRight className="w-8 h-8" />
+            <ChevronRight className="w-6 h-6 md:w-8 md:h-8" />
           </Button>
         </div>
       </div>
@@ -312,16 +312,16 @@ const Wrapped: React.FC<WrappedProps> = ({ onClose }) => {
 const IntroSlide: React.FC = () => {
   return (
     <div className="text-center px-4 max-w-5xl wrapped-slide">
-      <div className="mb-12 relative">
-        <div className="w-64 h-64 md:w-80 md:h-80 mx-auto bg-gradient-to-br from-[#1ED760] via-[#00D4FF] to-[#8B5CF6] rounded-full blur-3xl opacity-50 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 animate-pulse"></div>
-        <div className="w-64 h-64 md:w-80 md:h-80 mx-auto bg-gradient-to-br from-[#1ED760] via-[#00D4FF] to-[#8B5CF6] rounded-[3rem] shadow-2xl flex items-center justify-center wrapped-blob wrapped-gradient relative overflow-hidden rotate-3 hover:rotate-6 transition-transform duration-700">
-          <Code className="w-32 h-32 text-white mix-blend-overlay" />
+      <div className="mb-8 md:mb-12 relative">
+        <div className="w-40 h-40 md:w-80 md:h-80 mx-auto bg-gradient-to-br from-[#1ED760] via-[#00D4FF] to-[#8B5CF6] rounded-full blur-3xl opacity-50 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 animate-pulse"></div>
+        <div className="w-40 h-40 md:w-80 md:h-80 mx-auto bg-gradient-to-br from-[#1ED760] via-[#00D4FF] to-[#8B5CF6] rounded-[2rem] md:rounded-[3rem] shadow-2xl flex items-center justify-center wrapped-blob wrapped-gradient relative overflow-hidden rotate-3 hover:rotate-6 transition-transform duration-700">
+          <Code className="w-16 h-16 md:w-32 md:h-32 text-white mix-blend-overlay" />
         </div>
       </div>
-      <h1 className="text-6xl md:text-9xl font-black text-white mb-8 wrapped-headline tracking-tighter">
+      <h1 className="text-5xl md:text-9xl font-black text-white mb-4 md:mb-8 wrapped-headline tracking-tighter">
         2025<br/><span className="text-transparent bg-clip-text bg-gradient-to-r from-[#1ED760] to-[#00D4FF]">WRAPPED</span>
       </h1>
-      <p className="text-2xl md:text-4xl text-white/80 mb-4 font-medium">
+      <p className="text-lg md:text-4xl text-white/80 mb-4 font-medium px-2">
         It's been a year of commits, code reviews, and deploys.
       </p>
     </div>
@@ -332,34 +332,34 @@ const IntroSlide: React.FC = () => {
 const HookSlide: React.FC<{ data: any }> = ({ data }) => {
   return (
     <div className="text-center px-4 max-w-6xl wrapped-slide w-full">
-      <p className="text-[#1ED760] text-sm font-bold tracking-widest uppercase mb-8 wrapped-label">YOUR YEAR IN CODE</p>
-      <h1 className="text-5xl md:text-8xl font-black text-white mb-16 wrapped-headline tracking-tighter leading-[0.9]">
+      <p className="text-[#1ED760] text-xs md:text-sm font-bold tracking-widest uppercase mb-4 md:mb-8 wrapped-label">YOUR YEAR IN CODE</p>
+      <h1 className="text-3xl md:text-8xl font-black text-white mb-8 md:mb-16 wrapped-headline tracking-tighter leading-[0.95]">
         YOU DIDN'T JUST<br />CODE THIS YEAR.<br />
         <span className="text-[#1ED760]">YOU SHIPPED.</span>
       </h1>
       
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
-        <div className="bg-white/5 backdrop-blur-md rounded-3xl p-8 border border-white/10 hover:bg-white/10 transition-colors">
-          <div className="text-6xl font-black text-[#1ED760] mb-2 wrapped-stat">
+      <div className="grid grid-cols-3 gap-2 md:gap-6 w-full">
+        <div className="bg-white/5 backdrop-blur-md rounded-2xl md:rounded-3xl p-3 md:p-8 border border-white/10 hover:bg-white/10 transition-colors">
+          <div className="text-2xl md:text-6xl font-black text-[#1ED760] mb-1 md:mb-2 wrapped-stat">
             <CountUpNumber value={data.totalCommits} />
           </div>
-          <p className="text-white/60 font-bold uppercase tracking-wider text-sm">Commits</p>
+          <p className="text-white/60 font-bold uppercase tracking-wider text-[10px] md:text-sm">Commits</p>
         </div>
-        <div className="bg-white/5 backdrop-blur-md rounded-3xl p-8 border border-white/10 hover:bg-white/10 transition-colors delay-100">
-          <div className="text-6xl font-black text-[#00D4FF] mb-2 wrapped-stat">
+        <div className="bg-white/5 backdrop-blur-md rounded-2xl md:rounded-3xl p-3 md:p-8 border border-white/10 hover:bg-white/10 transition-colors delay-100">
+          <div className="text-2xl md:text-6xl font-black text-[#00D4FF] mb-1 md:mb-2 wrapped-stat">
             <CountUpNumber value={data.totalPRs} />
           </div>
-          <p className="text-white/60 font-bold uppercase tracking-wider text-sm">PRs Merged</p>
+          <p className="text-white/60 font-bold uppercase tracking-wider text-[10px] md:text-sm">PRs Merged</p>
         </div>
-        <div className="bg-white/5 backdrop-blur-md rounded-3xl p-8 border border-white/10 hover:bg-white/10 transition-colors delay-200">
-          <div className="text-6xl font-black text-[#8B5CF6] mb-2 wrapped-stat">
+        <div className="bg-white/5 backdrop-blur-md rounded-2xl md:rounded-3xl p-3 md:p-8 border border-white/10 hover:bg-white/10 transition-colors delay-200">
+          <div className="text-2xl md:text-6xl font-black text-[#8B5CF6] mb-1 md:mb-2 wrapped-stat">
             <CountUpNumber value={data.repoCount} />
           </div>
-          <p className="text-white/60 font-bold uppercase tracking-wider text-sm">Repos Active</p>
+          <p className="text-white/60 font-bold uppercase tracking-wider text-[10px] md:text-sm">Repos Active</p>
         </div>
       </div>
       
-      <div className="mt-12 text-xl text-white/50">
+      <div className="mt-6 md:mt-12 text-sm md:text-xl text-white/50">
         Top 1% of contributors in your timezone (probably)
       </div>
     </div>
@@ -372,16 +372,16 @@ const GenresSlide: React.FC<{ languages: LanguageStat[] }> = ({ languages }) => 
   const topLang = languages[0]
   
   return (
-    <div className="px-8 max-w-6xl w-full grid grid-cols-1 md:grid-cols-2 gap-12 items-center wrapped-slide">
-      <div className="text-left">
-        <p className="text-[#8B5CF6] text-sm font-bold tracking-widest uppercase mb-4 wrapped-label">TOP GENRE</p>
-        <h2 className="text-7xl md:text-9xl font-black text-white mb-6 wrapped-headline tracking-tighter leading-none">
+    <div className="px-4 md:px-8 max-w-6xl w-full flex flex-col md:grid md:grid-cols-2 gap-6 md:gap-12 items-center wrapped-slide">
+      <div className="text-center md:text-left">
+        <p className="text-[#8B5CF6] text-xs md:text-sm font-bold tracking-widest uppercase mb-2 md:mb-4 wrapped-label">TOP GENRE</p>
+        <h2 className="text-4xl md:text-9xl font-black text-white mb-3 md:mb-6 wrapped-headline tracking-tighter leading-none">
           {topLang.name.toUpperCase()}
         </h2>
-        <div className="text-3xl font-bold text-[#8B5CF6] mb-8">
+        <div className="text-lg md:text-3xl font-bold text-[#8B5CF6] mb-4 md:mb-8">
           You spent <CountUpNumber value={topLang.percentage} suffix="%" /> of your time here.
         </div>
-        <p className="text-white/60 text-xl italic max-w-md">
+        <p className="text-white/60 text-sm md:text-xl italic max-w-md mx-auto md:mx-0">
            {topLang.name === 'TypeScript' ? '"If it doesn\'t have types, I don\'t want it."' : 
             topLang.name === 'Python' ? '"Indentations are my love language."' :
             topLang.name === 'Go' ? '"Simplicity is the ultimate sophistication."' :
@@ -389,16 +389,16 @@ const GenresSlide: React.FC<{ languages: LanguageStat[] }> = ({ languages }) => 
         </p>
       </div>
 
-      <div className="space-y-3 w-full">
+      <div className="space-y-2 md:space-y-3 w-full">
         {languages.slice(0, 5).map((lang, i) => (
-          <div key={i} className="group relative h-16 md:h-20 w-full bg-white/5 rounded-lg overflow-hidden flex items-center px-6 hover:bg-white/10 transition-colors border border-white/5 hover:border-white/20 wrapped-card-enter" style={{ animationDelay: `${i * 0.1}s` }}>
+          <div key={i} className="group relative h-12 md:h-20 w-full bg-white/5 rounded-lg overflow-hidden flex items-center px-3 md:px-6 hover:bg-white/10 transition-colors border border-white/5 hover:border-white/20 wrapped-card-enter" style={{ animationDelay: `${i * 0.1}s` }}>
             <div className="absolute left-0 top-0 bottom-0 bg-current opacity-20 transition-all duration-1000 group-hover:opacity-30 wrapped-bar" style={{ width: `${lang.percentage}%`, color: lang.color }}></div>
             <div className="relative z-10 flex justify-between w-full items-center">
-               <div className="flex items-center gap-4">
-                 <span className="text-white/40 font-bold text-xl w-6">{i + 1}</span>
-                 <span className="text-white font-bold text-xl md:text-2xl">{lang.name}</span>
+               <div className="flex items-center gap-2 md:gap-4">
+                 <span className="text-white/40 font-bold text-sm md:text-xl w-4 md:w-6">{i + 1}</span>
+                 <span className="text-white font-bold text-sm md:text-2xl">{lang.name}</span>
                </div>
-               <span className="text-white/60 font-bold">{lang.percentage}%</span>
+               <span className="text-white/60 font-bold text-sm md:text-base">{lang.percentage}%</span>
             </div>
           </div>
         ))}
@@ -417,25 +417,25 @@ const TopArtistsSlide: React.FC = () => {
   ]
 
   return (
-    <div className="text-center w-full max-w-4xl wrapped-slide">
-      <p className="text-orange-500 text-sm font-bold tracking-widest uppercase mb-8 wrapped-label">TOP ARTISTS</p>
-      <h2 className="text-6xl md:text-8xl font-black text-white mb-16 wrapped-headline tracking-tight">
+    <div className="text-center w-full max-w-4xl px-4 wrapped-slide">
+      <p className="text-orange-500 text-xs md:text-sm font-bold tracking-widest uppercase mb-4 md:mb-8 wrapped-label">TOP ARTISTS</p>
+      <h2 className="text-4xl md:text-8xl font-black text-white mb-8 md:mb-16 wrapped-headline tracking-tight">
         THE LINEUP
       </h2>
       
-      <div className="grid grid-cols-2 gap-6">
+      <div className="grid grid-cols-2 gap-3 md:gap-6">
         {companies.map((company, i) => (
-          <div key={i} className="bg-[#181818] hover:bg-[#282828] p-6 rounded-2xl transition-all duration-300 group text-left wrapped-card-enter cursor-pointer" style={{ animationDelay: `${i * 0.1}s` }}>
-             <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center text-3xl mb-4 group-hover:scale-110 transition-transform overflow-hidden p-2">
+          <div key={i} className="bg-[#181818] hover:bg-[#282828] p-3 md:p-6 rounded-xl md:rounded-2xl transition-all duration-300 group text-left wrapped-card-enter cursor-pointer" style={{ animationDelay: `${i * 0.1}s` }}>
+             <div className="w-10 h-10 md:w-16 md:h-16 bg-white rounded-full flex items-center justify-center text-3xl mb-2 md:mb-4 group-hover:scale-110 transition-transform overflow-hidden p-1 md:p-2">
                 {company.image ? (
                   <img src={company.image} alt={company.name} className="w-full h-full object-contain" />
                 ) : (
-                  <span className="text-2xl">🏢</span>
+                  <span className="text-lg md:text-2xl">🏢</span>
                 )}
              </div>
-             <h3 className="text-2xl font-black text-white mb-1">{company.name}</h3>
-             <p className="text-white/60 font-medium">{company.role}</p>
-             <p className="text-white/40 text-sm mt-4 uppercase tracking-wider font-bold">{company.period}</p>
+             <h3 className="text-base md:text-2xl font-black text-white mb-0.5 md:mb-1">{company.name}</h3>
+             <p className="text-white/60 font-medium text-xs md:text-base">{company.role}</p>
+             <p className="text-white/40 text-[10px] md:text-sm mt-2 md:mt-4 uppercase tracking-wider font-bold">{company.period}</p>
           </div>
         ))}
       </div>
@@ -446,31 +446,31 @@ const TopArtistsSlide: React.FC = () => {
 // SLIDE 5: Code Habits
 const CodeHabitsSlide: React.FC<{ data: any }> = ({ data }) => {
   return (
-    <div className="w-full max-w-5xl px-8 flex flex-col md:flex-row items-center gap-12 wrapped-slide">
-      <div className="flex-1 text-left">
-         <p className="text-yellow-500 text-sm font-bold tracking-widest uppercase mb-6 wrapped-label">LISTENING HABITS</p>
-         <h2 className="text-6xl md:text-8xl font-black text-white mb-8 wrapped-headline leading-none">
+    <div className="w-full max-w-5xl px-4 md:px-8 flex flex-col md:flex-row items-center gap-6 md:gap-12 wrapped-slide">
+      <div className="flex-1 text-center md:text-left">
+         <p className="text-yellow-500 text-xs md:text-sm font-bold tracking-widest uppercase mb-3 md:mb-6 wrapped-label">LISTENING HABITS</p>
+         <h2 className="text-5xl md:text-8xl font-black text-white mb-4 md:mb-8 wrapped-headline leading-none">
            NIGHT<br/>OWL
          </h2>
-         <div className="bg-white/10 rounded-3xl p-8 backdrop-blur-md border border-white/10">
-            <p className="text-2xl text-white font-bold mb-2">You were most active on {data.peakDay}s.</p>
-            <p className="text-white/60 text-lg">Your commits peaked around {data.peakTime}, proving that sleep is indeed optional for shipping.</p>
+         <div className="bg-white/10 rounded-2xl md:rounded-3xl p-4 md:p-8 backdrop-blur-md border border-white/10">
+            <p className="text-lg md:text-2xl text-white font-bold mb-2">You were most active on {data.peakDay}s.</p>
+            <p className="text-white/60 text-sm md:text-lg">Your commits peaked around {data.peakTime}, proving that sleep is indeed optional for shipping.</p>
          </div>
       </div>
       
-      <div className="flex-1 w-full max-w-md">
+      <div className="flex-1 w-full max-w-[200px] md:max-w-md">
          <div className="aspect-square rounded-full bg-gradient-to-b from-yellow-500 to-orange-600 p-1 animate-spin-slow" style={{ animationDuration: '20s' }}>
             <div className="w-full h-full bg-black rounded-full flex items-center justify-center relative overflow-hidden">
                <div className="absolute inset-0 bg-[conic-gradient(from_0deg,transparent_0_25%,#Eab308_40%,transparent_45%)] opacity-20"></div>
-               <div className="w-4 h-4 bg-white rounded-full z-10"></div>
-               <div className="absolute w-[45%] h-1 bg-white/50 top-1/2 left-1/2 origin-left -rotate-45"></div>
-               <div className="absolute w-[30%] h-1 bg-white top-1/2 left-1/2 origin-left rotate-[120deg]"></div>
+               <div className="w-3 h-3 md:w-4 md:h-4 bg-white rounded-full z-10"></div>
+               <div className="absolute w-[45%] h-0.5 md:h-1 bg-white/50 top-1/2 left-1/2 origin-left -rotate-45"></div>
+               <div className="absolute w-[30%] h-0.5 md:h-1 bg-white top-1/2 left-1/2 origin-left rotate-[120deg]"></div>
                
                {/* Labels */}
-               <span className="absolute top-4 text-xs font-bold text-white/50">12AM</span>
-               <span className="absolute bottom-4 text-xs font-bold text-white/50">12PM</span>
-               <span className="absolute right-4 text-xs font-bold text-white/50">6AM</span>
-               <span className="absolute left-4 text-xs font-bold text-white/50">6PM</span>
+               <span className="absolute top-2 md:top-4 text-[8px] md:text-xs font-bold text-white/50">12AM</span>
+               <span className="absolute bottom-2 md:bottom-4 text-[8px] md:text-xs font-bold text-white/50">12PM</span>
+               <span className="absolute right-2 md:right-4 text-[8px] md:text-xs font-bold text-white/50">6AM</span>
+               <span className="absolute left-2 md:left-4 text-[8px] md:text-xs font-bold text-white/50">6PM</span>
             </div>
          </div>
       </div>
@@ -482,23 +482,23 @@ const CodeHabitsSlide: React.FC<{ data: any }> = ({ data }) => {
 const SpecialMomentsSlide: React.FC = () => {
   const moments = [
     { title: 'Launched Squeak', desc: '700+ users', color: 'text-yellow-400' },
-    { title: 'Shopify Impact', desc: '-55% Validation Errors', color: 'text-green-400' },
+    { title: 'Shopify Impact', desc: '-55% Errors', color: 'text-green-400' },
     { title: 'IBM Revenue', desc: '$1M+ Generated', color: 'text-blue-400' },
   ]
 
   return (
-    <div className="text-center w-full max-w-5xl wrapped-slide">
-      <h2 className="text-6xl md:text-8xl font-black text-white mb-16 wrapped-headline">
+    <div className="text-center w-full max-w-5xl px-4 wrapped-slide">
+      <h2 className="text-4xl md:text-8xl font-black text-white mb-8 md:mb-16 wrapped-headline">
         YOUR TOP<br/>MOMENTS
       </h2>
       
-      <div className="space-y-8">
+      <div className="space-y-4 md:space-y-8">
         {moments.map((m, i) => (
           <div key={i} className="relative overflow-hidden group cursor-pointer wrapped-card-enter" style={{ animationDelay: `${i * 0.2}s` }}>
             <div className="absolute inset-0 bg-gradient-to-r from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-            <div className="flex items-baseline justify-between border-b border-white/20 pb-4 group-hover:border-white transition-colors">
-               <h3 className={`text-4xl md:text-6xl font-black ${m.color} opacity-80 group-hover:opacity-100 transition-opacity`}>{m.title}</h3>
-               <p className="text-xl md:text-2xl font-bold text-white/60 group-hover:text-white transition-colors">{m.desc}</p>
+            <div className="flex items-baseline justify-between border-b border-white/20 pb-3 md:pb-4 group-hover:border-white transition-colors gap-2">
+               <h3 className={`text-xl md:text-6xl font-black ${m.color} opacity-80 group-hover:opacity-100 transition-opacity text-left`}>{m.title}</h3>
+               <p className="text-sm md:text-2xl font-bold text-white/60 group-hover:text-white transition-colors whitespace-nowrap">{m.desc}</p>
             </div>
           </div>
         ))}
@@ -510,19 +510,19 @@ const SpecialMomentsSlide: React.FC = () => {
 // SLIDE 7: Top Repos (List view style)
 const TopReposSlide: React.FC<{ repos: Array<{ name: string; commits: number }> }> = ({ repos }) => {
   return (
-    <div className="w-full max-w-4xl px-8 wrapped-slide">
-      <p className="text-emerald-400 text-sm font-bold tracking-widest uppercase mb-8 wrapped-label">ON REPEAT</p>
+    <div className="w-full max-w-4xl px-4 md:px-8 wrapped-slide">
+      <p className="text-emerald-400 text-xs md:text-sm font-bold tracking-widest uppercase mb-4 md:mb-8 wrapped-label text-center md:text-left">ON REPEAT</p>
       
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-2 md:gap-4">
         {repos.map((repo, i) => (
-          <div key={i} className="flex items-center gap-6 p-4 rounded-xl hover:bg-white/10 transition-all group wrapped-card-enter" style={{ animationDelay: `${i * 0.1}s` }}>
-            <span className="text-xl font-bold text-emerald-400 w-6 text-center">{i + 1}</span>
-            <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-teal-600 rounded flex items-center justify-center text-black font-bold shadow-lg group-hover:scale-105 transition-transform">
-               <Github className="w-6 h-6" />
+          <div key={i} className="flex items-center gap-3 md:gap-6 p-2 md:p-4 rounded-xl hover:bg-white/10 transition-all group wrapped-card-enter" style={{ animationDelay: `${i * 0.1}s` }}>
+            <span className="text-sm md:text-xl font-bold text-emerald-400 w-4 md:w-6 text-center">{i + 1}</span>
+            <div className="w-8 h-8 md:w-12 md:h-12 bg-gradient-to-br from-emerald-500 to-teal-600 rounded flex items-center justify-center text-black font-bold shadow-lg group-hover:scale-105 transition-transform flex-shrink-0">
+               <Github className="w-4 h-4 md:w-6 md:h-6" />
             </div>
-            <div className="flex-1">
-               <h3 className="text-2xl font-bold text-white mb-1 group-hover:text-emerald-400 transition-colors">{repo.name}</h3>
-               <p className="text-white/50 text-sm font-medium">{repo.commits} plays (commits)</p>
+            <div className="flex-1 min-w-0">
+               <h3 className="text-sm md:text-2xl font-bold text-white mb-0.5 md:mb-1 group-hover:text-emerald-400 transition-colors truncate">{repo.name}</h3>
+               <p className="text-white/50 text-xs md:text-sm font-medium">{repo.commits} commits</p>
             </div>
             <div className="hidden md:block text-white/30 font-bold text-sm tracking-wider">2025</div>
           </div>
@@ -545,19 +545,19 @@ const PersonalitySlide: React.FC<{ languages: LanguageStat[] }> = ({ languages }
   const title = personalities[topLang] || 'THE BUILDER'
 
   return (
-    <div className="text-center px-8 max-w-5xl wrapped-slide">
-      <div className="w-48 h-48 mx-auto mb-8 rounded-full bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 p-1 animate-spin-slow" style={{ animationDuration: '10s' }}>
+    <div className="text-center px-4 md:px-8 max-w-5xl wrapped-slide">
+      <div className="w-28 h-28 md:w-48 md:h-48 mx-auto mb-4 md:mb-8 rounded-full bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 p-1 animate-spin-slow" style={{ animationDuration: '10s' }}>
          <div className="w-full h-full rounded-full bg-black flex items-center justify-center overflow-hidden relative">
             <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20"></div>
-            <Zap className="w-20 h-20 text-white" />
+            <Zap className="w-12 h-12 md:w-20 md:h-20 text-white" />
          </div>
       </div>
       
-      <p className="text-purple-400 text-sm font-bold tracking-widest uppercase mb-4 wrapped-label">YOUR CODING PERSONALITY</p>
-      <h2 className="text-6xl md:text-8xl font-black text-white mb-8 wrapped-headline tracking-tight">
+      <p className="text-purple-400 text-xs md:text-sm font-bold tracking-widest uppercase mb-2 md:mb-4 wrapped-label">YOUR CODING PERSONALITY</p>
+      <h2 className="text-4xl md:text-8xl font-black text-white mb-4 md:mb-8 wrapped-headline tracking-tight">
         {title}
       </h2>
-      <p className="text-2xl text-white/80 max-w-2xl mx-auto leading-relaxed">
+      <p className="text-base md:text-2xl text-white/80 max-w-2xl mx-auto leading-relaxed">
         You don't just write code; you craft systems. With {topLang} as your main instrument, you orchestrate complex logic into simple, beautiful solutions.
       </p>
     </div>
@@ -567,38 +567,38 @@ const PersonalitySlide: React.FC<{ languages: LanguageStat[] }> = ({ languages }
 // SLIDE 9: Share
 const ShareSlide: React.FC<{ onClose: () => void; data: any }> = ({ onClose, data }) => {
   return (
-    <div className="text-center px-8 max-w-5xl wrapped-slide">
-      <div className="bg-gradient-to-br from-[#1ED760] via-[#00D4FF] to-[#8B5CF6] p-1 rounded-[2.5rem] shadow-2xl mb-12 rotate-1 hover:rotate-0 transition-transform duration-500">
-        <div className="bg-black rounded-[2.4rem] p-12 md:p-16 relative overflow-hidden">
+    <div className="text-center px-4 md:px-8 max-w-5xl wrapped-slide">
+      <div className="bg-gradient-to-br from-[#1ED760] via-[#00D4FF] to-[#8B5CF6] p-1 rounded-2xl md:rounded-[2.5rem] shadow-2xl mb-6 md:mb-12 rotate-1 hover:rotate-0 transition-transform duration-500">
+        <div className="bg-black rounded-[calc(1rem-1px)] md:rounded-[2.4rem] p-6 md:p-16 relative overflow-hidden">
            <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay"></div>
            <div className="relative z-10">
-              <p className="text-white/50 font-bold tracking-widest uppercase mb-2">MY 2025 WRAPPED</p>
-              <h2 className="text-5xl md:text-7xl font-black text-white mb-8 wrapped-headline">SAAI ARORA</h2>
+              <p className="text-white/50 font-bold tracking-widest uppercase mb-1 md:mb-2 text-xs md:text-base">MY 2025 WRAPPED</p>
+              <h2 className="text-3xl md:text-7xl font-black text-white mb-4 md:mb-8 wrapped-headline">SAAI ARORA</h2>
               
-              <div className="grid grid-cols-3 gap-4 text-left">
+              <div className="grid grid-cols-3 gap-2 md:gap-4 text-left">
                  <div>
-                    <div className="text-4xl font-black text-[#1ED760]"><CountUpNumber value={data.totalCommits} /></div>
-                    <p className="text-white/50 text-sm font-bold uppercase">Commits</p>
+                    <div className="text-xl md:text-4xl font-black text-[#1ED760]"><CountUpNumber value={data.totalCommits} /></div>
+                    <p className="text-white/50 text-[10px] md:text-sm font-bold uppercase">Commits</p>
                  </div>
                  <div>
-                    <div className="text-4xl font-black text-[#00D4FF]"><CountUpNumber value={data.totalPRs} /></div>
-                    <p className="text-white/50 text-sm font-bold uppercase">PRs</p>
+                    <div className="text-xl md:text-4xl font-black text-[#00D4FF]"><CountUpNumber value={data.totalPRs} /></div>
+                    <p className="text-white/50 text-[10px] md:text-sm font-bold uppercase">PRs</p>
                  </div>
                  <div>
-                    <div className="text-4xl font-black text-[#8B5CF6]"><CountUpNumber value={data.repoCount} /></div>
-                    <p className="text-white/50 text-sm font-bold uppercase">Repos</p>
+                    <div className="text-xl md:text-4xl font-black text-[#8B5CF6]"><CountUpNumber value={data.repoCount} /></div>
+                    <p className="text-white/50 text-[10px] md:text-sm font-bold uppercase">Repos</p>
                  </div>
               </div>
            </div>
         </div>
       </div>
 
-      <div className="flex flex-col md:flex-row gap-4 justify-center">
-        <Button onClick={onClose} className="bg-white text-black hover:bg-gray-200 px-8 py-6 rounded-full font-bold text-lg tracking-wide transform hover:scale-105 transition-all">
+      <div className="flex flex-col md:flex-row gap-3 md:gap-4 justify-center">
+        <Button onClick={onClose} className="bg-white text-black hover:bg-gray-200 px-6 md:px-8 py-4 md:py-6 rounded-full font-bold text-sm md:text-lg tracking-wide transform hover:scale-105 transition-all">
           BACK TO PORTFOLIO
         </Button>
-        <Button variant="outline" onClick={() => window.open('https://github.com/saai151', '_blank')} className="border-white/20 text-white hover:bg-white/10 px-8 py-6 rounded-full font-bold text-lg tracking-wide">
-          <Github className="w-5 h-5 mr-2" />
+        <Button variant="outline" onClick={() => window.open('https://github.com/saai151', '_blank')} className="border-white/20 text-white hover:bg-white/10 px-6 md:px-8 py-4 md:py-6 rounded-full font-bold text-sm md:text-lg tracking-wide">
+          <Github className="w-4 h-4 md:w-5 md:h-5 mr-2" />
           GITHUB
         </Button>
       </div>

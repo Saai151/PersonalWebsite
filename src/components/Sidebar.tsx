@@ -6,9 +6,10 @@ interface SidebarProps {
   onWrappedClick?: () => void
   onNavClick?: (href: string) => void
   isWrappedOpen?: boolean
+  isMobile?: boolean
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ onWrappedClick, onNavClick, isWrappedOpen }) => {
+const Sidebar: React.FC<SidebarProps> = ({ onWrappedClick, onNavClick, isWrappedOpen, isMobile = false }) => {
   const handleNavClick = (href: string, e?: React.MouseEvent) => {
     e?.preventDefault()
     
@@ -33,7 +34,12 @@ const Sidebar: React.FC<SidebarProps> = ({ onWrappedClick, onNavClick, isWrapped
   }
 
   return (
-    <div className="hidden md:flex w-[280px] bg-black h-screen flex-col fixed left-0 top-0 z-50 gap-2 p-2">
+    <div className={cn(
+      "flex flex-col gap-2 p-2 bg-black",
+      isMobile 
+        ? "w-full h-full" 
+        : "hidden md:flex w-[280px] h-screen fixed left-0 top-0 z-50"
+    )}>
       {/* Top Navigation Block */}
       <div className="bg-[#121212] rounded-lg p-6 flex flex-col gap-5">
         <div className="flex items-center gap-4 text-white cursor-pointer" onClick={(e) => handleNavClick('#home', e)}>

@@ -96,7 +96,7 @@ const Experience: React.FC = () => {
       <h2 className="text-2xl font-bold text-white mb-4">Experience</h2>
       
       {/* Table Header */}
-      <div className="grid grid-cols-[16px_4fr_2fr_1fr] md:grid-cols-[16px_6fr_4fr_1fr] gap-4 px-4 py-2 text-sm text-spotify-text-secondary border-b border-white/10 mb-2">
+      <div className="grid grid-cols-[16px_1fr_auto] md:grid-cols-[16px_6fr_4fr_1fr] gap-2 md:gap-4 px-2 md:px-4 py-2 text-sm text-spotify-text-secondary border-b border-white/10 mb-2">
         <span className="text-center">#</span>
         <span>Title</span>
         <span className="hidden md:block">Date Added</span>
@@ -118,7 +118,7 @@ const Experience: React.FC = () => {
               <div 
                 onClick={() => toggleExpand(index)}
                 className={cn(
-                  "grid grid-cols-[16px_4fr_2fr_1fr] md:grid-cols-[16px_6fr_4fr_1fr] gap-4 px-4 py-3 rounded-md items-center hover:bg-white/10 transition-colors cursor-pointer group",
+                  "grid grid-cols-[16px_1fr_auto] md:grid-cols-[16px_6fr_4fr_1fr] gap-2 md:gap-4 px-2 md:px-4 py-3 rounded-md items-center hover:bg-white/10 transition-colors cursor-pointer group",
                   isExpanded ? "bg-white/10" : ""
                 )}
               >
@@ -136,15 +136,15 @@ const Experience: React.FC = () => {
                 </div>
 
                 {/* Title / Company */}
-                <div className="flex items-center gap-3 min-w-0">
+                <div className="flex items-center gap-2 md:gap-3 min-w-0">
                   {exp.image && (
-                     <img src={exp.image} alt={exp.company} className="w-10 h-10 rounded object-contain bg-white/10 p-1" />
+                     <img src={exp.image} alt={exp.company} className="w-8 h-8 md:w-10 md:h-10 rounded object-contain bg-white/10 p-1 flex-shrink-0" />
                   )}
                   <div className="flex flex-col min-w-0">
-                    <span className={cn("font-medium truncate", isPlaying ? "text-spotify-green" : "text-white")}>
+                    <span className={cn("font-medium truncate text-sm md:text-base", isPlaying ? "text-spotify-green" : "text-white")}>
                       {exp.company}
                     </span>
-                    <span className="text-sm text-spotify-text-secondary truncate group-hover:text-white transition-colors">
+                    <span className="text-xs md:text-sm text-spotify-text-secondary truncate group-hover:text-white transition-colors">
                       {exp.role}
                     </span>
                   </div>
@@ -156,23 +156,23 @@ const Experience: React.FC = () => {
                 </div>
 
                 {/* Duration / Expand */}
-                <div className="flex items-center justify-end gap-4 text-sm text-spotify-text-secondary group-hover:text-white transition-colors">
-                   <span className="mr-2">{exp.duration}</span>
-                   {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />}
+                <div className="flex items-center justify-end gap-1 md:gap-4 text-xs md:text-sm text-spotify-text-secondary group-hover:text-white transition-colors">
+                   <span className="hidden sm:inline mr-2">{exp.duration}</span>
+                   {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4 md:opacity-0 md:group-hover:opacity-100 transition-opacity" />}
                 </div>
               </div>
 
               {/* Expanded Details (Lyrics style) */}
               <div 
                 className={cn(
-                  "px-12 py-0 overflow-hidden transition-all duration-300 ease-in-out",
+                  "px-4 md:px-12 py-0 overflow-hidden transition-all duration-300 ease-in-out",
                   isExpanded ? "max-h-[500px] opacity-100 py-4 mb-4" : "max-h-0 opacity-0"
                 )}
               >
-                 <div className="text-white/90 space-y-2">
+                 <div className="text-white/90 space-y-3">
                     <p className="text-xs uppercase tracking-widest text-spotify-text-secondary mb-2 font-bold">Achievements</p>
                     {exp.achievements.map((achievement, i) => (
-                      <p key={i} className="text-sm md:text-base leading-relaxed font-medium pl-4 border-l-2 border-spotify-green/30 hover:border-spotify-green transition-colors">
+                      <p key={i} className="text-xs md:text-base leading-relaxed font-medium pl-3 md:pl-4 border-l-2 border-spotify-green/30 hover:border-spotify-green transition-colors">
                         {achievement}
                       </p>
                     ))}

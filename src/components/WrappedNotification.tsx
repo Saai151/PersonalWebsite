@@ -44,7 +44,7 @@ export default function WrappedNotification({ onOpen, delay = 2000 }: WrappedNot
         <div className="absolute -inset-0.5 bg-gradient-to-r from-[#1db954] to-[#1ed760] rounded-lg blur opacity-50 group-hover:opacity-75 transition duration-1000 group-hover:duration-200 animate-pulse"></div>
         
         {/* Card Content */}
-        <div className="relative flex items-center gap-4 p-4 bg-[#282828] rounded-lg shadow-xl border border-[#1db954]/20 hover:bg-[#333] transition-colors w-[300px]">
+        <div className="relative flex items-center gap-3 md:gap-4 p-3 md:p-4 bg-[#282828] rounded-lg shadow-xl border border-[#1db954]/20 hover:bg-[#333] transition-colors w-[280px] md:w-[300px]">
           
           {/* Close Button */}
           <button 
@@ -55,8 +55,8 @@ export default function WrappedNotification({ onOpen, delay = 2000 }: WrappedNot
           </button>
 
           {/* Icon/Image */}
-          <div className="relative flex-shrink-0 w-12 h-12 bg-gradient-to-br from-[#1db954] to-[#191414] rounded-md flex items-center justify-center overflow-hidden group-hover:scale-105 transition-transform">
-            <Sparkles className="text-white drop-shadow-md" size={24} />
+          <div className="relative flex-shrink-0 w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-[#1db954] to-[#191414] rounded-md flex items-center justify-center overflow-hidden group-hover:scale-105 transition-transform">
+            <Sparkles className="text-white drop-shadow-md w-5 h-5 md:w-6 md:h-6" />
           </div>
 
           {/* Text */}
