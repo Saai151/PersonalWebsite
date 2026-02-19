@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { BadgeCheck, Play, MoreHorizontal } from 'lucide-react'
 import { Button } from './ui/button'
-import profileImage from '../assets/images/Profile.jpeg'
+import profileImage from '../assets/images/profile.png'
 
 const Hero: React.FC = () => {
   const [imageError, setImageError] = useState(false)

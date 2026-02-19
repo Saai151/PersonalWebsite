@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Play, Pause, SkipBack, SkipForward, Shuffle, Repeat, Volume2, List } from 'lucide-react'
 import { Button } from './ui/button'
-import profileImage from '../assets/images/Profile.jpeg'
+import profileImage from '../assets/images/profile.png'
 
 interface Project {
   name: string
