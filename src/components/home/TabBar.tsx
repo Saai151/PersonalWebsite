@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { X, Plus } from 'lucide-react';
 import { useTabStore } from '@/stores/tabStore';
 import { TAB_LABELS, getUnopenedTabTypes } from '@/domain/tabs';
@@ -11,8 +12,12 @@ import {
 import { cn } from '@/lib/utils';
 
 export default function TabBar() {
-  const { tabs, activeTab, setActiveTab, closeTab, openTab } = useTabStore();
-  const unopened = getUnopenedTabTypes(tabs);
+  const tabs = useTabStore((s) => s.tabs);
+  const activeTab = useTabStore((s) => s.activeTab);
+  const setActiveTab = useTabStore((s) => s.setActiveTab);
+  const closeTab = useTabStore((s) => s.closeTab);
+  const openTab = useTabStore((s) => s.openTab);
+  const unopened = useMemo(() => getUnopenedTabTypes(tabs), [tabs]);
 
   return (
     <div className="flex items-center border-b border-white/10 bg-black">
@@ -28,16 +33,16 @@ export default function TabBar() {
           )}
         >
           <span>{TAB_LABELS[tab.type]}</span>
-          <span
-            role="button"
+          <button
+            aria-label={`Close ${TAB_LABELS[tab.type]} tab`}
             onClick={(e) => {
               e.stopPropagation();
               closeTab(tab.type);
             }}
-            className="ml-1 rounded p-0.5 opacity-0 group-hover:opacity-100 hover:bg-white/20 transition-opacity"
+            className="ml-1 rounded p-0.5 opacity-40 group-hover:opacity-100 hover:bg-white/20 transition-opacity"
           >
             <X className="w-3 h-3" />
-          </span>
+          </button>
           {activeTab === tab.type && (
             <span className="absolute bottom-0 left-0 right-0 h-px bg-white" />
           )}

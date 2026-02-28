@@ -4,9 +4,11 @@ import { ArrowRight } from 'lucide-react';
 import { TypeAnimation } from 'react-type-animation';
 import { useState } from 'react';
 
+let hasAnimatedOnce = false;
+
 export default function HomeView() {
   const openTab = useTabStore((s) => s.openTab);
-  const [isTypingDone, setIsTypingDone] = useState(false);
+  const [isTypingDone, setIsTypingDone] = useState(hasAnimatedOnce);
 
   return (
     <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center px-6">
@@ -15,7 +17,7 @@ export default function HomeView() {
           "Hey, I'm Saai"
         ) : (
           <TypeAnimation
-            sequence={['Hey, I\'m Saai', 1200, 'I\'m a Software Engineer', 1200, 'I like to build cool things', 1200, 'Hey, I\'m Saai', () => setIsTypingDone(true)]}
+            sequence={['Hey, I\'m Saai', 1200, 'I\'m a Software Engineer', 1200, 'I like to build cool things', 1200, 'Hey, I\'m Saai', () => { hasAnimatedOnce = true; setIsTypingDone(true); }]}
             wrapper="span"
             speed={20}
             repeat={0}
