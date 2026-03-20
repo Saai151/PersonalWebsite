@@ -1,6 +1,10 @@
-import { useSearchParams } from 'react-router-dom';
+import {
+  Navigate,
+  useLocation,
+  useSearchParams,
+} from 'react-router-dom';
 import { getPostBySlug } from '@/data/blogPosts';
-import { isTabOpen, type TabType } from '@/domain/tabs';
+import { pathToTab, type TabType } from '@/domain/tabs';
 import { useTabStore } from '@/stores/tabStore';
 import HomeView from './HomeView';
 import TabBar from './TabBar';
@@ -9,19 +13,31 @@ import TabContent from './TabContent';
 export default function PortfolioShell() {
   const tabs = useTabStore((s) => s.tabs);
   const activeTab = useTabStore((s) => s.activeTab);
+
+  const location = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const postSlug = searchParams.get('post');
-  const urlWantsBlog = Boolean(postSlug && getPostBySlug(postSlug));
+  const pathTab = pathToTab(location.pathname);
 
-  const augmentBlogTab = urlWantsBlog && !isTabOpen(tabs, 'blog');
-  const showChrome = tabs.length > 0 || urlWantsBlog;
-  const effectiveActiveTab: TabType | null =
-    activeTab ?? (urlWantsBlog ? 'blog' : null);
+  const showChrome =
+    location.pathname !== '/' &&
+    (pathTab !== null || tabs.length > 0);
+
+  const effectiveActiveTab: TabType | null = pathTab ?? activeTab;
+
+  const legacyPost = searchParams.get('post');
+  if (location.pathname === '/' && legacyPost && getPostBySlug(legacyPost)) {
+    return (
+      <Navigate
+        to={`/blog?post=${encodeURIComponent(legacyPost)}`}
+        replace
+      />
+    );
+  }
 
   const clearPostFromUrl = () => {
     setSearchParams(
-      (prev) => {
+      (prev: URLSearchParams) => {
         const next = new URLSearchParams(prev);
         next.delete('post');
         return next;
@@ -37,7 +53,6 @@ export default function PortfolioShell() {
   return (
     <div className="min-h-screen bg-black text-white flex flex-col">
       <TabBar
-        augmentBlogTab={augmentBlogTab}
         activeTabEffective={effectiveActiveTab}
         onClearDeepLinkedPost={clearPostFromUrl}
       />

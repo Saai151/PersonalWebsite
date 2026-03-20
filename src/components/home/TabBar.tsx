@@ -1,10 +1,13 @@
 import { useMemo } from 'react';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { X, Plus } from 'lucide-react';
 import { useTabStore } from '@/stores/tabStore';
 import {
   TAB_LABELS,
-  getUnopenedTabTypes,
+  TAB_PATHS,
+  getUnopenedTabTypesForPath,
   isTabOpen,
+  pathToTab,
   type TabType,
 } from '@/domain/tabs';
 import { Button } from '@/components/ui/button';
@@ -17,38 +20,65 @@ import {
 import { cn } from '@/lib/utils';
 
 type TabBarProps = {
-  /** Blog tab driven only by `?post=` until user opens it in the store */
-  augmentBlogTab: boolean;
   activeTabEffective: TabType | null;
   onClearDeepLinkedPost: () => void;
 };
 
 export default function TabBar({
-  augmentBlogTab,
   activeTabEffective,
   onClearDeepLinkedPost,
 }: TabBarProps) {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const postSlug = searchParams.get('post');
+
+  const pathTab = pathToTab(location.pathname);
   const tabs = useTabStore((s) => s.tabs);
   const closeTab = useTabStore((s) => s.closeTab);
   const openTab = useTabStore((s) => s.openTab);
-  const unopened = useMemo(() => getUnopenedTabTypes(tabs), [tabs]);
 
   const tabTypesToShow = useMemo(() => {
     const types = tabs.map((t) => t.type);
-    if (augmentBlogTab && !types.includes('blog')) types.push('blog');
+    if (pathTab && !types.includes(pathTab)) types.push(pathTab);
     return types;
-  }, [tabs, augmentBlogTab]);
+  }, [tabs, pathTab]);
+
+  const unopened = useMemo(
+    () => getUnopenedTabTypesForPath(tabs, pathTab),
+    [tabs, pathTab]
+  );
+
+  const isVirtualTab = (type: TabType) =>
+    pathTab === type && !isTabOpen(tabs, type);
 
   const handleSelectTab = (type: TabType) => {
     openTab(type);
+    navigate(TAB_PATHS[type]);
   };
 
   const handleCloseTab = (type: TabType) => {
-    if (type === 'blog' && augmentBlogTab && !isTabOpen(tabs, 'blog')) {
-      onClearDeepLinkedPost();
+    if (isVirtualTab(type)) {
+      if (type === 'blog' && postSlug) {
+        onClearDeepLinkedPost();
+        return;
+      }
+      navigate('/');
       return;
     }
     closeTab(type);
+    const { tabs: nextTabs, activeTab: nextActive } = useTabStore.getState();
+    if (nextTabs.length === 0) {
+      navigate('/');
+    } else if (nextActive) {
+      navigate(TAB_PATHS[nextActive]);
+    }
+  };
+
+  const openSectionFromMenu = (type: TabType) => {
+    if (pathTab && !isTabOpen(tabs, pathTab)) openTab(pathTab);
+    openTab(type);
+    navigate(TAB_PATHS[type]);
   };
 
   return (
@@ -106,7 +136,7 @@ export default function TabBar({
             {unopened.map((type) => (
               <DropdownMenuItem
                 key={type}
-                onClick={() => openTab(type)}
+                onClick={() => openSectionFromMenu(type)}
                 className="text-white/80 hover:text-white focus:text-white focus:bg-white/10 cursor-pointer"
               >
                 {TAB_LABELS[type]}

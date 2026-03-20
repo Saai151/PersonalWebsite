@@ -1,4 +1,5 @@
-import { type TabType, TAB_LABELS, ALL_TAB_TYPES } from '@/domain/tabs';
+import { useNavigate } from 'react-router-dom';
+import { type TabType, TAB_LABELS, TAB_PATHS, ALL_TAB_TYPES } from '@/domain/tabs';
 import { useTabStore } from '@/stores/tabStore';
 import { ArrowRight } from 'lucide-react';
 import { TypeAnimation } from 'react-type-animation';
@@ -7,8 +8,14 @@ import { useState } from 'react';
 let hasAnimatedOnce = false;
 
 export default function HomeView() {
+  const navigate = useNavigate();
   const openTab = useTabStore((s) => s.openTab);
   const [isTypingDone, setIsTypingDone] = useState(hasAnimatedOnce);
+
+  const goToSection = (type: TabType) => {
+    openTab(type);
+    navigate(TAB_PATHS[type]);
+  };
 
   return (
     <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center px-6">
@@ -32,7 +39,7 @@ export default function HomeView() {
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full">
         {ALL_TAB_TYPES.map((type) => (
-          <TabBox key={type} type={type} label={TAB_LABELS[type]} onOpen={openTab} />
+          <TabBox key={type} type={type} label={TAB_LABELS[type]} onOpen={goToSection} />
         ))}
       </div>
       </div>
