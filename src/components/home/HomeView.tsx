@@ -12,6 +12,7 @@ export default function HomeView() {
 
   return (
     <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center px-6">
+      <div className="w-full max-w-3xl flex flex-col items-center text-center">
       <h1 className="text-5xl md:text-7xl font-bold tracking-tight mb-4">
         {isTypingDone ? (
           "Hey, I'm Saai"
@@ -29,10 +30,11 @@ export default function HomeView() {
         Software engineer &amp; builder
       </p>
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full max-w-2xl">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full">
         {ALL_TAB_TYPES.map((type) => (
           <TabBox key={type} type={type} label={TAB_LABELS[type]} onOpen={openTab} />
         ))}
+      </div>
       </div>
     </div>
   );

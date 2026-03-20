@@ -1,7 +1,12 @@
 import { useMemo } from 'react';
 import { X, Plus } from 'lucide-react';
 import { useTabStore } from '@/stores/tabStore';
-import { TAB_LABELS, getUnopenedTabTypes } from '@/domain/tabs';
+import {
+  TAB_LABELS,
+  getUnopenedTabTypes,
+  isTabOpen,
+  type TabType,
+} from '@/domain/tabs';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -11,42 +16,76 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
 
-export default function TabBar() {
+type TabBarProps = {
+  /** Blog tab driven only by `?post=` until user opens it in the store */
+  augmentBlogTab: boolean;
+  activeTabEffective: TabType | null;
+  onClearDeepLinkedPost: () => void;
+};
+
+export default function TabBar({
+  augmentBlogTab,
+  activeTabEffective,
+  onClearDeepLinkedPost,
+}: TabBarProps) {
   const tabs = useTabStore((s) => s.tabs);
-  const activeTab = useTabStore((s) => s.activeTab);
-  const setActiveTab = useTabStore((s) => s.setActiveTab);
   const closeTab = useTabStore((s) => s.closeTab);
   const openTab = useTabStore((s) => s.openTab);
   const unopened = useMemo(() => getUnopenedTabTypes(tabs), [tabs]);
 
+  const tabTypesToShow = useMemo(() => {
+    const types = tabs.map((t) => t.type);
+    if (augmentBlogTab && !types.includes('blog')) types.push('blog');
+    return types;
+  }, [tabs, augmentBlogTab]);
+
+  const handleSelectTab = (type: TabType) => {
+    openTab(type);
+  };
+
+  const handleCloseTab = (type: TabType) => {
+    if (type === 'blog' && augmentBlogTab && !isTabOpen(tabs, 'blog')) {
+      onClearDeepLinkedPost();
+      return;
+    }
+    closeTab(type);
+  };
+
   return (
     <div className="flex items-center border-b border-white/10 bg-black">
-      {tabs.map((tab) => (
-        <button
-          key={tab.type}
-          onClick={() => setActiveTab(tab.type)}
+      {tabTypesToShow.map((type) => (
+        <div
+          key={type}
+          role="presentation"
           className={cn(
-            'group relative flex items-center gap-2 px-4 py-2.5 text-sm transition-colors border-r border-white/10',
-            activeTab === tab.type
+            'group relative flex items-center border-r border-white/10 text-sm transition-colors',
+            activeTabEffective === type
               ? 'bg-white/10 text-white'
-              : 'text-white/50 hover:text-white hover:bg-white/5'
+              : 'text-white/50'
           )}
         >
-          <span>{TAB_LABELS[tab.type]}</span>
           <button
-            aria-label={`Close ${TAB_LABELS[tab.type]} tab`}
-            onClick={(e) => {
-              e.stopPropagation();
-              closeTab(tab.type);
-            }}
-            className="ml-1 rounded p-0.5 opacity-40 group-hover:opacity-100 hover:bg-white/20 transition-opacity"
+            type="button"
+            onClick={() => handleSelectTab(type)}
+            className={cn(
+              'flex-1 px-4 py-2.5 text-left hover:text-white transition-colors',
+              activeTabEffective !== type && 'hover:bg-white/5'
+            )}
+          >
+            {TAB_LABELS[type]}
+          </button>
+          <button
+            type="button"
+            aria-label={`Close ${TAB_LABELS[type]} tab`}
+            onClick={() => handleCloseTab(type)}
+            className="mr-2 rounded p-1 opacity-40 group-hover:opacity-100 hover:bg-white/20 hover:opacity-100 transition-opacity"
           >
             <X className="w-3 h-3" />
           </button>
-          {activeTab === tab.type && (
-            <span className="absolute bottom-0 left-0 right-0 h-px bg-white" />
+          {activeTabEffective === type && (
+            <span className="absolute bottom-0 left-0 right-0 h-px bg-white pointer-events-none" />
           )}
-        </button>
+        </div>
       ))}
 
       {unopened.length > 0 && (

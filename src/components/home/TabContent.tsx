@@ -1,12 +1,14 @@
-import { useTabStore } from '@/stores/tabStore';
+import type { TabType } from '@/domain/tabs';
 import InternshipsView from './InternshipsView';
 import ProjectsView from './ProjectsView';
 import BlogView from './BlogView';
 
-export default function TabContent() {
-  const activeTab = useTabStore((s) => s.activeTab);
+type TabContentProps = {
+  activeTabEffective: TabType | null;
+};
 
-  switch (activeTab) {
+export default function TabContent({ activeTabEffective }: TabContentProps) {
+  switch (activeTabEffective) {
     case 'internships':
       return <InternshipsView />;
     case 'projects':

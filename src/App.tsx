@@ -74,12 +74,6 @@ function App() {
     return () => window.removeEventListener('hashchange', handleHashChange)
   }, [showWrapped])
 
-  // Expose scrollToSection for use in Sidebar
-  useEffect(() => {
-    // Store scroll function globally for debugging
-    ;(window as any).scrollToSection = scrollToSection
-  }, [])
-
   return (
     <div className="flex h-screen bg-spotify-dark text-spotify-text overflow-hidden">
       <Sidebar 
