@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
-import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { X, Plus } from 'lucide-react';
+import { getPostBySlug } from '@/data/blogPosts';
 import { useTabStore } from '@/stores/tabStore';
 import {
   TAB_LABELS,
@@ -21,17 +22,22 @@ import { cn } from '@/lib/utils';
 
 type TabBarProps = {
   activeTabEffective: TabType | null;
-  onClearDeepLinkedPost: () => void;
+  onNavigateToBlogList: () => void;
 };
 
 export default function TabBar({
   activeTabEffective,
-  onClearDeepLinkedPost,
+  onNavigateToBlogList,
 }: TabBarProps) {
   const location = useLocation();
   const navigate = useNavigate();
+  const { slug: pathSlug } = useParams();
   const [searchParams] = useSearchParams();
-  const postSlug = searchParams.get('post');
+  const legacyPostSlug = searchParams.get('post');
+  const blogArticleOpen = Boolean(
+    (pathSlug && getPostBySlug(pathSlug)) ||
+      (legacyPostSlug && getPostBySlug(legacyPostSlug))
+  );
 
   const pathTab = pathToTab(location.pathname);
   const tabs = useTabStore((s) => s.tabs);
@@ -59,8 +65,8 @@ export default function TabBar({
 
   const handleCloseTab = (type: TabType) => {
     if (isVirtualTab(type)) {
-      if (type === 'blog' && postSlug) {
-        onClearDeepLinkedPost();
+      if (type === 'blog' && blogArticleOpen) {
+        onNavigateToBlogList();
         return;
       }
       navigate('/');

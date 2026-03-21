@@ -105,3 +105,8 @@ export const blogPosts: BlogPost[] = [
 export function getPostBySlug(slug: string): BlogPost | undefined {
   return blogPosts.find((p) => p.slug === slug);
 }
+
+/** Shareable URL for a post (title is reflected in the slug). */
+export function blogPostPath(slug: string): string {
+  return `/blog/${encodeURIComponent(slug)}`;
+}

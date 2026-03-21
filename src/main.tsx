@@ -10,6 +10,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<PortfolioShell />} />
+        <Route path="/blog/:slug" element={<PortfolioShell />} />
         <Route path="/blog" element={<PortfolioShell />} />
         <Route path="/projects" element={<PortfolioShell />} />
         <Route path="/internships" element={<PortfolioShell />} />

@@ -1,10 +1,24 @@
 import { ArrowLeft, ExternalLink } from 'lucide-react';
-import { useCallback, useMemo } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useEffect, useMemo } from 'react';
+import {
+  Navigate,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from 'react-router-dom';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
-import { blogPosts, getPostBySlug, type BlogPost } from '@/data/blogPosts';
+import {
+  blogPosts,
+  blogPostPath,
+  getPostBySlug,
+  type BlogPost,
+} from '@/data/blogPosts';
+import {
+  applyBlogPostMeta,
+  resetBlogDocumentMeta,
+} from '@/lib/blogDocumentMeta';
 
-const POST_PARAM = 'post';
+const LEGACY_POST_PARAM = 'post';
 
 function PostArticle({ post, onBack }: { post: BlogPost; onBack: () => void }) {
   return (
@@ -65,23 +79,41 @@ function PostArticle({ post, onBack }: { post: BlogPost; onBack: () => void }) {
 }
 
 export default function BlogView() {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const slugFromUrl = searchParams.get(POST_PARAM);
+  const navigate = useNavigate();
+  const { slug: pathSlug } = useParams();
+  const [searchParams] = useSearchParams();
+  const legacySlug = searchParams.get(LEGACY_POST_PARAM);
+
+  const slugFromUrl = pathSlug ?? legacySlug ?? undefined;
+
   const activePost = useMemo(
     () => (slugFromUrl ? getPostBySlug(slugFromUrl) : undefined),
     [slugFromUrl]
   );
 
-  const openPost = useCallback(
-    (slug: string) => {
-      setSearchParams({ [POST_PARAM]: slug }, { replace: false });
-    },
-    [setSearchParams]
-  );
+  useEffect(() => {
+    const origin = window.location.origin;
+    if (activePost) {
+      const pageUrl = `${origin}${window.location.pathname}${window.location.search}`;
+      applyBlogPostMeta(activePost, pageUrl);
+      return () => {
+        resetBlogDocumentMeta(`${origin}/blog`);
+      };
+    }
+    resetBlogDocumentMeta(`${origin}/blog`);
+  }, [activePost]);
 
-  const closePost = useCallback(() => {
-    setSearchParams({}, { replace: false });
-  }, [setSearchParams]);
+  if (slugFromUrl && !activePost) {
+    return <Navigate to="/blog" replace />;
+  }
+
+  const openPost = (slug: string) => {
+    navigate(blogPostPath(slug));
+  };
+
+  const closePost = () => {
+    navigate('/blog');
+  };
 
   if (activePost) {
     return <PostArticle post={activePost} onBack={closePost} />;

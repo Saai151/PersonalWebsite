@@ -21,10 +21,14 @@ export const TAB_PATHS: Record<TabType, string> = {
 };
 
 export function pathToTab(pathname: string): TabType | null {
-  const entry = (Object.entries(TAB_PATHS) as [TabType, string][]).find(
-    ([, path]) => path === pathname
-  );
-  return entry?.[0] ?? null;
+  for (const [type, path] of Object.entries(TAB_PATHS) as [TabType, string][]) {
+    if (type === 'blog') {
+      if (pathname === path || pathname.startsWith(`${path}/`)) return 'blog';
+      continue;
+    }
+    if (pathname === path) return type;
+  }
+  return null;
 }
 
 export function createTab(type: TabType): Tab {

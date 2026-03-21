@@ -1,9 +1,10 @@
 import {
   Navigate,
   useLocation,
+  useNavigate,
   useSearchParams,
 } from 'react-router-dom';
-import { getPostBySlug } from '@/data/blogPosts';
+import { blogPostPath, getPostBySlug } from '@/data/blogPosts';
 import { pathToTab, type TabType } from '@/domain/tabs';
 import { useTabStore } from '@/stores/tabStore';
 import HomeView from './HomeView';
@@ -15,7 +16,8 @@ export default function PortfolioShell() {
   const activeTab = useTabStore((s) => s.activeTab);
 
   const location = useLocation();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
   const pathTab = pathToTab(location.pathname);
 
@@ -26,25 +28,18 @@ export default function PortfolioShell() {
   const effectiveActiveTab: TabType | null = pathTab ?? activeTab;
 
   const legacyPost = searchParams.get('post');
+  if (location.pathname === '/blog' && legacyPost && getPostBySlug(legacyPost)) {
+    return (
+      <Navigate to={blogPostPath(legacyPost)} replace />
+    );
+  }
   if (location.pathname === '/' && legacyPost && getPostBySlug(legacyPost)) {
     return (
-      <Navigate
-        to={`/blog?post=${encodeURIComponent(legacyPost)}`}
-        replace
-      />
+      <Navigate to={blogPostPath(legacyPost)} replace />
     );
   }
 
-  const clearPostFromUrl = () => {
-    setSearchParams(
-      (prev: URLSearchParams) => {
-        const next = new URLSearchParams(prev);
-        next.delete('post');
-        return next;
-      },
-      { replace: true }
-    );
-  };
+  const navigateToBlogList = () => navigate('/blog');
 
   if (!showChrome) {
     return <HomeView />;
@@ -54,7 +49,7 @@ export default function PortfolioShell() {
     <div className="min-h-screen bg-black text-white flex flex-col">
       <TabBar
         activeTabEffective={effectiveActiveTab}
-        onClearDeepLinkedPost={clearPostFromUrl}
+        onNavigateToBlogList={navigateToBlogList}
       />
       <div className="flex-1 overflow-y-auto">
         <TabContent activeTabEffective={effectiveActiveTab} />

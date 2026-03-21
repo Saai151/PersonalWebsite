@@ -43,6 +43,13 @@ npm run build
 
 The built files will be in the `dist` directory.
 
+### Link previews (Slack, iMessage, etc.)
+
+Blog posts use **Vercel Edge Middleware** (`middleware.ts`) to rewrite the HTML for `/blog/:slug` so crawlers see the correct `<title>`, `og:*`, and `twitter:*` tags **without running JavaScript**. A **`blog-meta.json`** file is emitted at build time from your post data (see `vite.config.ts`).
+
+- **Vite alone** (`npm run dev` / `npm run preview`) does **not** run Edge middleware—previews there still look like the generic site unless you also update meta from React.
+- To test middleware locally, use **`vercel dev`** from this project directory (requires the [Vercel CLI](https://vercel.com/docs/cli)).
+
 ### Preview Production Build
 
 ```bash
