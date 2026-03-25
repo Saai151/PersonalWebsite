@@ -1,3 +1,11 @@
+export interface BlogSection {
+  /** URL fragment for #anchor links and sidebar TOC */
+  id: string;
+  title: string;
+  level: 'h2' | 'h3' | 'h4';
+  paragraphs: string[];
+}
+
 export interface BlogPost {
   slug: string;
   title: string;
@@ -5,7 +13,10 @@ export interface BlogPost {
   /** ISO date for sorting */
   dateSort: string;
   excerpt: string;
+  /** Plain posts: body copy. Use [] when `sections` is set. */
   paragraphs: string[];
+  /** Optional: headings + TOC sidebar with scroll-to anchors */
+  sections?: BlogSection[];
   sourceUrl?: string;
 }
 
@@ -99,6 +110,193 @@ export const blogPosts: BlogPost[] = [
       'If the autonomous engineer is coming, you do not compete with it.',
       'You command it.',
     ],
+  },
+  {
+    slug: 'how-to-get-your-first-user',
+    title: 'how to get your first paid user',
+    date: 'Mar 25, 2026',
+    dateSort: '2026-03-25',
+    excerpt:
+      'speed beats ego early, distribution beats a perfect product, and conversion beats vanity traffic.',
+    paragraphs: [],
+    sections: [
+      {
+        id: 'intro',
+        title: 'intro',
+        level: 'h2',
+        paragraphs: [
+          'if you’re building startups you’ve probably felt this',
+          'you can build fast, ship consistently, ideas are flowing, everything feels good',
+          'then you try to get your first user and suddenly it’s crickets',
+          'this is where most builders get exposed. not because it’s impossible, but because it forces you to do things you’ve been lowkey avoiding the whole time',
+          'i’ve built products and worked with early teams backed by yc and other vcs and seen this pattern over and over',
+          'your first paid user isn’t magic',
+          'you’re just overcomplicating it',
+        ],
+      },
+      {
+        id: 'step-0-market',
+        title: 'don’t shoot yourself in the foot',
+        level: 'h2',
+        paragraphs: [
+          'before anything else, look at the market you chose',
+          'if you decided to start in healthcare, government, or selling to big enterprises early, congrats you picked hard mode for no reason',
+          'long sales cycles, too many stakeholders, compliance everywhere, and no one trusts you yet',
+          'and then people are surprised they can’t get their first user',
+          'like yeah no shit',
+          'you didn’t fail, you just picked a market where nobody is going to move',
+          'early on your only real advantage is speed',
+          'so go where people actually move fast',
+          'startups, small teams, people who are willing to try something new and not make you sit through 6 meetings just to say no',
+          'you can go upmarket later',
+          'right now you need signal, not ego',
+        ],
+      },
+      {
+        id: 'consumer-distribution',
+        title: 'consumer: distribution is the game',
+        level: 'h2',
+        paragraphs: [
+          'if you’re building for consumers and blaming your product, you’re probably coping',
+          'nobody has seen it',
+          'you can build something insane and it still won’t matter if it’s sitting in a corner of the internet with zero distribution',
+          'early on distribution is the whole game',
+          'if you don’t have budget, you’re doing organic whether you like it or not',
+          'which means actually showing up',
+          'post on x',
+          'reply to people',
+          'be in reddit threads',
+          'drop demos',
+          'build in public',
+          'talk to real humans',
+          'you’re not trying to go viral',
+          'you’re trying to get literally 1 person to care',
+          'most people skip this part because it’s slow and a bit embarrassing',
+          'but that’s the work',
+        ],
+      },
+      {
+        id: 'funnel',
+        title: 'understanding the funnel',
+        level: 'h3',
+        paragraphs: [
+          'there are only two things that matter early',
+          'getting people in',
+          'getting them to pay',
+        ],
+      },
+      {
+        id: 'top-vs-middle',
+        title: 'top vs middle',
+        level: 'h4',
+        paragraphs: [
+          'top of funnel is easy',
+          'you can always get more traffic',
+          'post more, spend more, whatever',
+          'middle of funnel is where things fall apart',
+          'if people aren’t converting, traffic is not your problem',
+          'your product is confusing',
+          'your onboarding is mid',
+          'or your value just isn’t strong enough yet',
+          'adding more features here is just you coping again',
+        ],
+      },
+      {
+        id: 'conversion',
+        title: 'conversion is the truth',
+        level: 'h3',
+        paragraphs: [
+          'this is the only metric that actually matters early',
+          'are people willing to pay',
+          'you can have thousands of users and still be delusional',
+          'conversion is the reality check',
+          'if nobody is paying, something is off',
+          'and it’s usually not fixed by building more',
+          'it’s fixed by reducing friction and getting people to value fast',
+          'free trials help',
+          'good onboarding helps',
+          'a clear use case helps',
+          'trying to do everything does not help',
+          'also actually look at your data',
+          'where do people drop',
+          'what do they click',
+          'what do paying users do differently',
+          'tools like posthog are useful, but the real point is',
+          'stop guessing and start looking',
+        ],
+      },
+      {
+        id: 'b2b-conversations',
+        title: 'b2b: talk to people',
+        level: 'h2',
+        paragraphs: [
+          'if you’re building b2b and waiting for users to magically show up, you’re gonna be waiting for a while',
+          'your first users come from talking to people',
+          'cold dms',
+          'warm intros',
+          'asking for calls',
+          'following up',
+          'yeah it doesn’t scale',
+          'that’s why it works',
+          'most people avoid this because it feels awkward',
+          'but that awkwardness is literally the job',
+          'you don’t understand your user until you’ve actually talked to them enough times',
+        ],
+      },
+      {
+        id: 'design-partners',
+        title: 'the cheat code: design partners',
+        level: 'h3',
+        paragraphs: [
+          'if there’s one thing that feels like a cheat code early, it’s this',
+          'find design partners',
+          'someone who actually has the problem and is willing to build with you',
+          'not just give feedback once and disappear',
+          'someone who stays in the loop',
+          'they tell you what matters',
+          'they call out what’s useless',
+          'they help you iterate way faster',
+          'sometimes they even pay early',
+          'instead of guessing, you’re building with real pressure',
+          'if you can solve a real problem for even one design partner, you’re already ahead of most people building in silence',
+        ],
+      },
+      {
+        id: 'what-people-get-wrong',
+        title: 'what people get wrong',
+        level: 'h3',
+        paragraphs: [
+          'most builders think they need more features, better design, more polish before they can get users',
+          'this is almost always cap',
+          'building feels productive',
+          'talking to users feels uncertain',
+          'so people hide in building',
+          'you convince yourself “one more feature” will fix it',
+          'it won’t',
+          'your first user is not thinking about your long term vision',
+          'they’re asking one thing',
+          'does this help me right now',
+        ],
+      },
+      {
+        id: 'final-thoughts',
+        title: 'final thoughts',
+        level: 'h2',
+        paragraphs: [
+          'getting your first user isn’t about some secret growth hack',
+          'it’s about doing the obvious things most people avoid',
+          'pick a market where people actually respond',
+          'put your product in front of real people',
+          'talk to users even when it feels awkward',
+          'fix what’s clearly broken',
+          'that’s it',
+          'it’s simple, but not easy',
+          'most people won’t do it consistently, which is why most people never get there',
+          'once you get your first user things start to click',
+          'until then you’re just guessing and calling it strategy',
+        ],
+      },
+    ] as BlogSection[],
   },
 ].sort((a, b) => (a.dateSort < b.dateSort ? 1 : -1));
 
